@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
-import { Box, Paper, Fab } from '@mui/material'
+import { Box, Paper, Fab, Typography } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import LogoutIcon from '@mui/icons-material/Logout';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 import MainContent from './components/MainContent'
+import waterMeLogo from '/water-drop.svg'
+import { supabase } from './supabaseClient'
 
-
-const supabase = createClient(import.meta.env.VITE_APP_SUPABASE_URL, import.meta.env.VITE_APP_SUPABASE_ANON_KEY)
 
 function App() {
   const theme = createTheme({
@@ -57,9 +57,9 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
-  console.log('session', session)
-
+  const loginWidth = window.innerWidth < 600 ? '100%' : '400px'
   if (!session) {
+
     return (
 
       <ThemeProvider theme={theme}>
@@ -70,18 +70,60 @@ function App() {
           height: "100vh",
           width: "100vw",
           display: 'flex',
+          flexGrow: 1,
           justifyContent: 'center',
           alignItems: 'center',
           color: 'text.primary',
           backgroundColor: '#FFCDD2',
+          backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
+          border: '2px solid #000',
         }}>
           <Paper elevation={3} sx={{
             padding: 10,
-            minHeight: '50%',
             minWidth: '50%',
+            display: 'flex',
+            gap: 2,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
             objectFit: 'contain',
           }}>
-            <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme='default' providers={[]} />
+            <Box component="img" src={waterMeLogo} sx={{
+              height: 100,
+              width: 100,
+              willChange: 'filter',
+              transition: 'filter 300ms',
+              objectFit: 'contain',
+              ':hover': {
+                filter: 'drop-shadow(0 0 0.75rem #81C784)',
+              },
+            }} />
+            <Typography variant="h4" component="h1" sx={{
+              fontWeight: 'bold',
+            }}>
+              Water Me
+            </Typography>
+            <Auth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                style: {
+                  button: {
+                    backgroundColor: '#f48fb1',
+                    color: '#000',
+                  },
+                  input: {
+                    backgroundColor: '#fff',
+                    color: '#000',
+                  },
+                  container: {
+                    minWidth: loginWidth,
+                  },
+                }
+              }}
+              theme='dark'
+              providers={[]}
+            />
           </Paper>
         </Box>
 
@@ -104,16 +146,40 @@ function App() {
           alignItems: 'center',
           color: 'text.primary',
           backgroundColor: '#FFCDD2',
+          backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
         }}>
           <Paper elevation={3} sx={{
             padding: 10,
-            minHeight: '50%',
             minWidth: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             objectFit: 'contain',
           }}>
+            <LockResetIcon fontSize='large' />
+            <Typography variant="h4" component="h1" sx={{
+              fontWeight: 'bold',
+            }}>
+              Reset Password
+            </Typography>
             <Auth
               supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
+              appearance={{
+                theme: ThemeSupa,
+                style: {
+                  button: {
+                    backgroundColor: '#f48fb1',
+                    color: '#000',
+                  },
+                  input: {
+                    backgroundColor: '#fff',
+                    color: '#000',
+                  },
+                  container: {
+                    minWidth: loginWidth,
+                  },
+                }
+              }}
               theme='default'
               providers={[]}
               view='update_password'
@@ -145,18 +211,25 @@ function App() {
             justifyContent: 'center',
             alignItems: 'center',
             color: 'text.primary',
-            backgroundColor: '#FFCDD2',
+            // backgroundColor: '#FFCDD2',
+            backgroundImage: 'radial-gradient(circle at 50% 60%, #FFCDD2 0%, #000 100%)',
           }}>
             <MainContent />
-          </Box>
-          <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
+            <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
             sx={{
               position: 'absolute',
               bottom: 20,
               right: 20,
+              zIndex : 100,
+              willChange: 'filter',
+              transition: 'filter 300ms',
+              ':hover': {
+                filter: 'drop-shadow(0 0 0.75rem #fff)',
+              },
             }}>
             <LogoutIcon />
           </Fab>
+          </Box>
         </Box>
 
       </ThemeProvider>
