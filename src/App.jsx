@@ -3,12 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
-import { Box, Paper, Fab } from '@mui/material'
+import { Box, Paper, Fab, Typography } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import LogoutIcon from '@mui/icons-material/Logout';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 import MainContent from './components/MainContent'
+import waterMeLogo from '/water-drop.svg'
 
 
 const supabase = createClient(import.meta.env.VITE_APP_SUPABASE_URL, import.meta.env.VITE_APP_SUPABASE_ANON_KEY)
@@ -81,10 +83,27 @@ function App() {
             padding: 10,
             minWidth: '50%',
             display: 'flex',
+            gap: 2,
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             objectFit: 'contain',
           }}>
+            <Box component="img" src={waterMeLogo} sx={{
+              height: 100,
+              width: 100,
+              willChange: 'filter',
+              transition: 'filter 300ms',
+              objectFit: 'contain',
+              ':hover': {
+                filter: 'drop-shadow(0 0 0.75rem #81C784)',
+              },
+            }}/>
+            <Typography variant="h4" component="h1" sx={{
+              fontWeight: 'bold',
+            }}>
+              Water Me
+            </Typography>
             <Auth
             supabaseClient={supabase}
             appearance={{
@@ -137,6 +156,12 @@ function App() {
             alignItems: 'center',
             objectFit: 'contain',
           }}>
+            <LockResetIcon fontSize='large' />
+            <Typography variant="h4" component="h1" sx={{
+              fontWeight: 'bold',
+            }}>
+              Reset Password
+            </Typography>
             <Auth
               supabaseClient={supabase}
               appearance={{
