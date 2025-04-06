@@ -10,7 +10,8 @@ import { supabase } from '../supabaseClient'
 
 export default function MainContent() {
 
-  const [plants, setPlants] = React.useState([]);
+  const [plants, setPlants] = React.useState(null);
+  const [fetchError, setFetchError] = React.useState(null);
 
   React.useEffect(() => {
     // Fetch the plants data from Supabase
@@ -20,10 +21,11 @@ export default function MainContent() {
         .select();
 
       if (error) {
-        console.error('Error fetching plants:', error);
+        setFetchError(error);
+        setPlants(null);
       } else {
-        // console.log('Fetched plants:', data);
         setPlants(data);
+        setFetchError(null);
       }
     };
 
@@ -32,15 +34,38 @@ export default function MainContent() {
 
   return (
     <Box sx={{
-       flexGrow: 1,
-       }}>
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ sm: 1, md: 8, lg: 12 }}>
-        {Array.from(plants).map((plantInfo) => (
-          <Grid key={plantInfo.id} size={{ xs: 2, sm: 4, md: 4 }}>
-            <PlantCard plantInfo={plantInfo} />
-          </Grid>
-        ))}
-      </Grid>
+      flexGrow: 1,
+    }}>
+
+      {fetchError && (
+        <Paper
+          elevation={0}
+          sx={{
+            padding: 2,
+            margin: 2,
+            backgroundColor: 'transparent',
+            borderRadius: 2,
+          }}
+        >
+          <h1>Error fetching plants</h1>
+          <p>{fetchError}</p>
+        </Paper>
+      )}
+      {plants && !fetchError && (
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ sm: 1, md: 8, lg: 12 }}>
+          {Array.from(plants).map((plantInfo, keyIndex) => (
+            <Grid key={keyIndex} size={{ xs: 2, sm: 4, md: 4 }}>
+              <PlantCard
+              name={plantInfo.name}
+              scientificName={plantInfo.scientificName}
+              drinkingDay={plantInfo.drinkingDay}
+              wateringDate={plantInfo.wateringDate}
+              drinkingPortion={plantInfo.drinkingPortion}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   )
 }
