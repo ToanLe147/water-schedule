@@ -57,9 +57,9 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
-  console.log('session', session)
-
+  const loginWidth = window.innerWidth < 600 ? '100%' : '400px'
   if (!session) {
+
     return (
 
       <ThemeProvider theme={theme}>
@@ -70,18 +70,42 @@ function App() {
           height: "100vh",
           width: "100vw",
           display: 'flex',
+          flexGrow: 1,
           justifyContent: 'center',
           alignItems: 'center',
           color: 'text.primary',
           backgroundColor: '#FFCDD2',
+          border: '2px solid #000',
         }}>
           <Paper elevation={3} sx={{
             padding: 10,
-            minHeight: '50%',
             minWidth: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             objectFit: 'contain',
           }}>
-            <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme='default' providers={[]} />
+            <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: ThemeSupa,
+              style: {
+                button: {
+                  backgroundColor: '#f48fb1',
+                  color: '#000',
+                },
+                input: {
+                  backgroundColor: '#fff',
+                  color: '#000',
+                },
+                container: {
+                  minWidth: loginWidth,
+                },
+              }
+            }}
+            theme='dark'
+            providers={[]}
+            />
           </Paper>
         </Box>
 
@@ -107,13 +131,30 @@ function App() {
         }}>
           <Paper elevation={3} sx={{
             padding: 10,
-            minHeight: '50%',
             minWidth: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             objectFit: 'contain',
           }}>
             <Auth
               supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
+              appearance={{
+                theme: ThemeSupa,
+                style: {
+                  button: {
+                    backgroundColor: '#f48fb1',
+                    color: '#000',
+                  },
+                  input: {
+                    backgroundColor: '#fff',
+                    color: '#000',
+                  },
+                  container: {
+                    minWidth: loginWidth,
+                  },
+                }
+              }}
               theme='default'
               providers={[]}
               view='update_password'
