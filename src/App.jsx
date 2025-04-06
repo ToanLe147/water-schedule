@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
@@ -11,9 +10,8 @@ import LockResetIcon from '@mui/icons-material/LockReset';
 
 import MainContent from './components/MainContent'
 import waterMeLogo from '/water-drop.svg'
+import { supabase } from './supabaseClient'
 
-
-const supabase = createClient(import.meta.env.VITE_APP_SUPABASE_URL, import.meta.env.VITE_APP_SUPABASE_ANON_KEY)
 
 function App() {
   const theme = createTheme({
@@ -213,7 +211,7 @@ function App() {
             color: 'text.primary',
             backgroundColor: '#FFCDD2',
           }}>
-            <MainContent />
+            <MainContent client={supabase}/>
           </Box>
           <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
             sx={{
