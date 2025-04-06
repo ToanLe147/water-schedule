@@ -10,6 +10,8 @@ import Rating from '@mui/material/Rating';
 import { styled } from '@mui/material/styles';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
+import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 const WaterLevel = styled(Rating)({
@@ -43,11 +45,10 @@ export default function PlantCard({
     <>
       <Card
         sx={{
-          // backgroundColor: '#FFCDD2',
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover, :active': {
-            filter: 'drop-shadow(0 0 0.5rem #03A9F4)',
+            filter: 'drop-shadow(0 0 0.85rem #121212)',
           },
         }}
       >
@@ -85,8 +86,8 @@ export default function PlantCard({
           />
         </CardContent>
         <CardActions>
-          <Button size="small">Pour Water</Button>
-          <Button size="small" onClick={findPlantInfo}>Learn More</Button>
+          <Button variant="contained" size="small" startIcon={<LocalDrinkIcon />}>Pour Water</Button>
+          <Button variant="contained" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
         </CardActions>
       </Card>
     </>
