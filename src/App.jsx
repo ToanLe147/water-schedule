@@ -75,6 +75,7 @@ function App() {
           alignItems: 'center',
           color: 'text.primary',
           backgroundColor: '#FFCDD2',
+          backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
           border: '2px solid #000',
         }}>
           <Paper elevation={3} sx={{
@@ -96,32 +97,32 @@ function App() {
               ':hover': {
                 filter: 'drop-shadow(0 0 0.75rem #81C784)',
               },
-            }}/>
+            }} />
             <Typography variant="h4" component="h1" sx={{
               fontWeight: 'bold',
             }}>
               Water Me
             </Typography>
             <Auth
-            supabaseClient={supabase}
-            appearance={{
-              theme: ThemeSupa,
-              style: {
-                button: {
-                  backgroundColor: '#f48fb1',
-                  color: '#000',
-                },
-                input: {
-                  backgroundColor: '#fff',
-                  color: '#000',
-                },
-                container: {
-                  minWidth: loginWidth,
-                },
-              }
-            }}
-            theme='dark'
-            providers={[]}
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                style: {
+                  button: {
+                    backgroundColor: '#f48fb1',
+                    color: '#000',
+                  },
+                  input: {
+                    backgroundColor: '#fff',
+                    color: '#000',
+                  },
+                  container: {
+                    minWidth: loginWidth,
+                  },
+                }
+              }}
+              theme='dark'
+              providers={[]}
             />
           </Paper>
         </Box>
@@ -145,6 +146,7 @@ function App() {
           alignItems: 'center',
           color: 'text.primary',
           backgroundColor: '#FFCDD2',
+          backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
         }}>
           <Paper elevation={3} sx={{
             padding: 10,
@@ -209,18 +211,25 @@ function App() {
             justifyContent: 'center',
             alignItems: 'center',
             color: 'text.primary',
-            backgroundColor: '#FFCDD2',
+            // backgroundColor: '#FFCDD2',
+            backgroundImage: 'radial-gradient(circle at 50% 60%, #FFCDD2 0%, #000 100%)',
           }}>
-            <MainContent client={supabase}/>
-          </Box>
-          <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
+            <MainContent />
+            <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
             sx={{
               position: 'absolute',
               bottom: 20,
               right: 20,
+              zIndex : 100,
+              willChange: 'filter',
+              transition: 'filter 300ms',
+              ':hover': {
+                filter: 'drop-shadow(0 0 0.75rem #fff)',
+              },
             }}>
             <LogoutIcon />
           </Fab>
+          </Box>
         </Box>
 
       </ThemeProvider>

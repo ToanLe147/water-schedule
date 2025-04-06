@@ -8,7 +8,7 @@ import PlantCard from './PlantCard';
 import { supabase } from '../supabaseClient'
 
 
-export default function MainContent() {
+export default function MainContent(child) {
 
   const [plants, setPlants] = React.useState(null);
   const [fetchError, setFetchError] = React.useState(null);
@@ -66,6 +66,7 @@ export default function MainContent() {
           ))}
         </Grid>
       )}
+
     </Box>
   )
 }
