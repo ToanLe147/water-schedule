@@ -13,6 +13,7 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { supabase } from '../supabaseClient';
 
 const WaterLevel = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -22,6 +23,7 @@ const WaterLevel = styled(Rating)({
 
 
 export default function PlantCard({
+  plantID,
   name,
   scientificName,
   drinkingDay,
@@ -38,7 +40,23 @@ export default function PlantCard({
     const date2 = new Date();
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays/drinkingDay*5;
+    return (drinkingDay - diffDays) / drinkingDay * 5;
+  }
+
+  const pourWater = async () => {
+    const date = new Date();
+    const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+    const { data, error } = await supabase
+      .from('plants')
+      .update({ wateringDate: formattedDate })
+      .eq('id', plantID)
+      .select();
+    if (error) {
+      alert('Error updating watering date: ' + error.message);
+    }
+    if (data) {
+      alert('Watering date updated to: ', data.wateringDate);
+    }
   }
 
   return (
@@ -86,7 +104,7 @@ export default function PlantCard({
           />
         </CardContent>
         <CardActions>
-          <Button variant="contained" size="small" startIcon={<LocalDrinkIcon />}>Pour Water</Button>
+          <Button variant="contained" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
           <Button variant="contained" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
         </CardActions>
       </Card>
