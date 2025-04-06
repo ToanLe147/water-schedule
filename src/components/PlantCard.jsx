@@ -15,8 +15,8 @@ export default function PlantCard({
 
 
   const findPlantInfo = async () => {
-    // const response = await fetch(`https://trefle.io/api/v1/plants?token=${import.meta.env.VITE_APP_TREFLE_API_KEY}&q=${scientificName}&filter[scientific_name]=${scientificName}`);
-    const response = await fetch(`https://trefle.io/api/v1/plants?token=${import.meta.env.VITE_APP_TREFLE_API_KEY}&q=${scientificName}`);
+    const response = await fetch(`https://trefle.io/api/v1/plants?token=${import.meta.env.VITE_APP_TREFLE_API_KEY}&q=${scientificName}&filter[scientific_name]=${scientificName}`);
+    // const response = await fetch(`https://trefle.io/api/v1/plants?token=${import.meta.env.VITE_APP_TREFLE_API_KEY}&q=${scientificName}`);
     const json = await response.json();
     console.log(json);
   }
