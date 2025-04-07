@@ -21,7 +21,6 @@ const WaterLevel = styled(Rating)({
   }
 });
 
-
 export default function PlantCard({
   plantID,
   name,
@@ -68,7 +67,7 @@ export default function PlantCard({
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover, :active': {
-            filter: 'drop-shadow(0 0 0.85rem #121212)',
+            filter: 'drop-shadow(0 0 0.85rem #880E4F)',
           },
           // border: '2px solid #880E4F',
         }}
