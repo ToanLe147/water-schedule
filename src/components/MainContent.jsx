@@ -71,9 +71,11 @@ export default function MainContent() {
   }
   , []);
 
+  const flexDirectionOnDevice = window.innerWidth < 600 ? 'row' : 'column'
+
   return (
     <Box sx={{
-      flexGrow: 1,
+
     }}>
 
       {fetchError && (
@@ -91,9 +93,16 @@ export default function MainContent() {
         </Paper>
       )}
       {plants && !fetchError && (
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ sm: 1, md: 8, lg: 12 }}>
-          {Array.from(plants).map((plantInfo, keyIndex) => (
-            <Grid key={keyIndex} size={{ xs: 2, sm: 4, md: 4 }}>
+        <Box sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: {flexDirectionOnDevice},
+          gap: 2,
+          padding: 2,
+        }}>
+          {Array.from(plants).map((plantInfo) => (
               <PlantCard
                 plantID={plantInfo.id}
                 name={plantInfo.name}
@@ -102,9 +111,8 @@ export default function MainContent() {
                 wateringDate={plantInfo.wateringDate}
                 drinkingPortion={plantInfo.drinkingPortion}
               />
-            </Grid>
           ))}
-        </Grid>
+        </Box>
       )}
 
     </Box>

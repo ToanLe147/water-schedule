@@ -13,6 +13,18 @@ import waterMeLogo from '/water-drop.svg'
 import { supabase } from './supabaseClient'
 
 
+const AppContainerStyle = {
+  height: "100dvh",
+  width: "100dvw",
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  alignItems: 'center',
+  color: 'text.primary',
+  backgroundColor: '#FFCDD2',
+  backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
+}
+
 function App() {
   const theme = createTheme({
     palette: {
@@ -66,18 +78,7 @@ function App() {
 
         <CssBaseline />
 
-        <Box sx={{
-          height: "100vh",
-          width: "100vw",
-          display: 'flex',
-          flexGrow: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: 'text.primary',
-          backgroundColor: '#FFCDD2',
-          backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
-          border: '2px solid #000',
-        }}>
+        <Box sx={AppContainerStyle}>
           <Paper elevation={3} sx={{
             padding: 10,
             minWidth: '50%',
@@ -94,7 +95,7 @@ function App() {
               willChange: 'filter',
               transition: 'filter 300ms',
               objectFit: 'contain',
-              ':hover': {
+              ':hover, :active': {
                 filter: 'drop-shadow(0 0 0.75rem #81C784)',
               },
             }} />
@@ -138,16 +139,7 @@ function App() {
 
         <CssBaseline />
 
-        <Box sx={{
-          height: "100vh",
-          width: "100vw",
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: 'text.primary',
-          backgroundColor: '#FFCDD2',
-          backgroundImage: 'radial-gradient(circle, #FFCDD2 0%, #000 100%)',
-        }}>
+        <Box sx={AppContainerStyle}>
           <Paper elevation={3} sx={{
             padding: 10,
             minWidth: '50%',
@@ -198,29 +190,14 @@ function App() {
 
         <CssBaseline />
 
-        <Box sx={{
-          height: "100vh",
-          width: "100vw",
-          display: 'flex',
-        }}>
-          <Box sx={{
-            padding: 2,
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'text.primary',
-            // backgroundColor: '#FFCDD2',
-            backgroundImage: 'radial-gradient(circle at 50% 60%, #FFCDD2 0%, #000 100%)',
-          }}>
-            <MainContent />
-            <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
+        <Box sx={AppContainerStyle}>
+          <MainContent />
+          <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
             sx={{
               position: 'absolute',
               bottom: 20,
               right: 20,
-              zIndex : 100,
+              zIndex: 100,
               willChange: 'filter',
               transition: 'filter 300ms',
               ':hover': {
@@ -229,7 +206,6 @@ function App() {
             }}>
             <LogoutIcon />
           </Fab>
-          </Box>
         </Box>
 
       </ThemeProvider>

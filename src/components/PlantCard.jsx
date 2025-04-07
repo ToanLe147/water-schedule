@@ -82,9 +82,9 @@ export default function PlantCard({
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Scientific Name: {scientificName}
           </Typography>
-          {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Drinking Day: {drinkingDay} days
-          </Typography> */}
+          </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
           </Typography>
