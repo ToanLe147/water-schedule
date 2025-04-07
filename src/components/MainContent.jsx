@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 import { Box, Paper, Fab } from '@mui/material'
 import { CssBaseline } from '@mui/material'
@@ -9,25 +8,16 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PlantCard from './PlantCard';
 import { supabase } from '../supabaseClient'
 import { AppContainerStyle, theme } from '../styles'
-import AuthContext from '../contexts'
 
 
 export default function MainContent() {
-
-  const {session, _} = useContext(AuthContext)
-  const navigate = useNavigate()
-
-  if (!session) {
-    // If the user is not logged in, redirect to the login page
-    navigate('/login')
-  }
-
   // Fetch the plants data from Supabase
   // and subscribe to changes
   const [plants, setPlants] = useState([]);
   const [fetchError, setFetchError] = useState(null);
 
   useEffect(() => {
+    // Subscribe to changes in the plants table
     supabase
       .channel('plants')
       .on('postgres_changes', { event: '*', schema: '*' }, payload => {
@@ -63,8 +53,7 @@ export default function MainContent() {
     };
 
     fetchPlants();
-  }
-    , []);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

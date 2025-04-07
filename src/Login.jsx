@@ -1,5 +1,4 @@
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useContext, useEffect } from 'react'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
@@ -10,22 +9,9 @@ import { ThemeProvider } from '@mui/material/styles'
 import waterMeLogo from '/water-drop.svg'
 import { supabase } from './supabaseClient'
 import { AppContainerStyle, authCardWidth, theme } from './styles'
-import AuthContext from './contexts'
 
 
 export default function Login() {
-
-  const {session, sessionEvent} = useContext(AuthContext)
-  const navigate = useNavigate()
-
-  if (session) {
-    // If the user is already logged in, redirect to the main page
-    navigate('/')
-  }
-  if (session && sessionEvent === 'PASSWORD_RECOVERY') {
-    // If the user is already logged in, redirect to the main page
-    navigate('/reset-password')
-  }
 
   return (
     <ThemeProvider theme={theme}>
