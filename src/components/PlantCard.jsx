@@ -24,6 +24,7 @@ const WaterLevel = styled(Rating)({
 export default function PlantCard({
   plantID,
   name,
+  plantImage,
   scientificName,
   drinkingDay,
   wateringDate,
@@ -54,7 +55,7 @@ export default function PlantCard({
       alert('Error updating watering date: ' + error.message);
     }
     if (data) {
-      alert('Watering date updated to: ', data.wateringDate);
+      alert('Watering date updated to: ', formattedDate);
     }
   }
 
@@ -62,20 +63,23 @@ export default function PlantCard({
     <>
       <Card
         sx={{
-          width: {xs: '100%', sm: '100%', md: 'auto'},
-          height: 'auto',
+          width: { xs: '100%', sm: '100%', md: 'auto' },
+          // height: 'auto',
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover, :active': {
             filter: 'drop-shadow(0 0 0.85rem #880E4F)',
           },
-          // border: '2px solid #880E4F',
         }}
       >
         <CardMedia
-          sx={{ maxHeight: 140 }}
-          image="/static/images/cards/contemplative-reptile.jpg"
+          component="img"
+          src={plantImage}
           title={name}
+          sx={{
+            height: 140,
+            objectFit: 'contain',
+          }}
         />
         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'begin', justifyContent: 'space-between' }}>
           <Typography gutterBottom variant="h5" component="div">

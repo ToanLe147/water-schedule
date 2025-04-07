@@ -34,9 +34,6 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe()
   }, [navigate])
 
-  console.log('session: ', session)
-  console.log('session event: ', sessionEvent)
-
   return (
     <AuthContext.Provider value={{ session, sessionEvent }}>
       {children}

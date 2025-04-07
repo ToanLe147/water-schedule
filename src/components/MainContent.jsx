@@ -47,6 +47,14 @@ export default function MainContent() {
         setFetchError(error);
         setPlants(null);
       } else {
+
+        Array.from(data).map(async (plantInfo) => {
+          const imageUrl = await getPlantImage(plantInfo.image);
+          plantInfo.image = imageUrl;
+            (
+              { ...plantInfo}
+            )
+        });
         setPlants(data);
         setFetchError(null);
       }
@@ -54,6 +62,21 @@ export default function MainContent() {
 
     fetchPlants();
   }, []);
+
+  const getPlantImage = async (image_name) => {
+    const { data, _ } = await supabase
+      .storage
+      .from('plantimage')
+      .createSignedUrl(image_name, 60 * 60, { // 1 hour
+        transform: {
+          width: 300,
+          height: 300,
+        }
+      });
+    if (data) {
+      return (data.signedUrl)
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,6 +114,7 @@ export default function MainContent() {
                 key={keyIndex}
                 plantID={plantInfo.id}
                 name={plantInfo.name}
+                plantImage={plantInfo.image}
                 scientificName={plantInfo.scientificName}
                 drinkingDay={plantInfo.drinkingDay}
                 wateringDate={plantInfo.wateringDate}
