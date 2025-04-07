@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
@@ -14,6 +15,7 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { supabase } from '../supabaseClient';
+import PlantPage from './PlantPage';
 
 const WaterLevel = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -30,6 +32,9 @@ export default function PlantCard({
   wateringDate,
   drinkingPortion }) {
 
+  const [openPlantPage, setOpenPlantPage] = React.useState(false);
+
+  console.log('PlantCard', plantImage);
   const findPlantInfo = async () => {
     const url = `https://www.google.com/search?q=${scientificName}`;
     window.open(url, "_blank", "noreferrer");
@@ -61,10 +66,10 @@ export default function PlantCard({
 
   return (
     <>
+      <PlantPage open={openPlantPage} setOpen={setOpenPlantPage} plantImage={plantImage}/>
       <Card
         sx={{
           width: { xs: '100%', sm: '100%', md: 'auto' },
-          // height: 'auto',
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover, :active': {
@@ -72,15 +77,17 @@ export default function PlantCard({
           },
         }}
       >
-        <CardMedia
-          component="img"
-          src={plantImage}
-          title={name}
-          sx={{
-            height: 140,
-            objectFit: 'contain',
-          }}
-        />
+        <CardActionArea onClick={() => setOpenPlantPage(true)}>
+          <CardMedia
+            component="img"
+            src={plantImage}
+            title={name}
+            sx={{
+              height: 140,
+              objectFit: 'contain',
+            }}
+          />
+        </CardActionArea>
         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'begin', justifyContent: 'space-between' }}>
           <Typography gutterBottom variant="h5" component="div">
             {name}
