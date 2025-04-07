@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 
 import PlantCard from './PlantCard';
 import { supabase } from '../supabaseClient'
@@ -12,25 +11,6 @@ export default function MainContent() {
 
   const [plants, setPlants] = React.useState([]);
   const [fetchError, setFetchError] = React.useState(null);
-
-  // React.useEffect(() => {
-  //   // Fetch the plants data from Supabase
-  //   const fetchPlants = async () => {
-  //     const { data, error } = await supabase
-  //       .from('plants')
-  //       .select();
-
-  //     if (error) {
-  //       setFetchError(error);
-  //       setPlants(null);
-  //     } else {
-  //       setPlants(data);
-  //       setFetchError(null);
-  //     }
-  //   };
-
-  //   fetchPlants();
-  // }, []);
 
   React.useEffect(() => {
     supabase
@@ -71,13 +51,8 @@ export default function MainContent() {
   }
   , []);
 
-  const flexDirectionOnDevice = window.innerWidth < 600 ? 'row' : 'column'
-
   return (
-    <Box sx={{
-
-    }}>
-
+    <>
       {fetchError && (
         <Paper
           elevation={0}
@@ -94,11 +69,12 @@ export default function MainContent() {
       )}
       {plants && !fetchError && (
         <Box sx={{
+          height: '100dvh',
           display: 'flex',
           flexWrap: 'wrap',
+          overflow: 'auto',
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: {flexDirectionOnDevice},
           gap: 2,
           padding: 2,
         }}>
@@ -114,7 +90,6 @@ export default function MainContent() {
           ))}
         </Box>
       )}
-
-    </Box>
+    </>
   )
 }

@@ -17,6 +17,7 @@ const AppContainerStyle = {
   height: "100dvh",
   width: "100dvw",
   display: 'flex',
+  // flexWrap: 'wrap',
   justifyContent: 'center',
   flexDirection: 'column',
   alignItems: 'center',
@@ -70,6 +71,7 @@ function App() {
   }, [])
 
   const loginWidth = window.innerWidth < 600 ? '100%' : '400px'
+
   if (!session) {
 
     return (
@@ -144,6 +146,8 @@ function App() {
             padding: 10,
             minWidth: '50%',
             display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
             justifyContent: 'center',
             alignItems: 'center',
             objectFit: 'contain',
@@ -172,7 +176,7 @@ function App() {
                   },
                 }
               }}
-              theme='default'
+              theme='dark'
               providers={[]}
               view='update_password'
             />
@@ -191,21 +195,25 @@ function App() {
         <CssBaseline />
 
         <Box sx={AppContainerStyle}>
-          <MainContent />
-          <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
-            sx={{
-              position: 'absolute',
-              bottom: 20,
-              right: 20,
-              zIndex: 100,
-              willChange: 'filter',
-              transition: 'filter 300ms',
-              ':hover': {
-                filter: 'drop-shadow(0 0 0.75rem #fff)',
-              },
+          <Box sx={{
+            maxWidth: '100%',
             }}>
-            <LogoutIcon />
-          </Fab>
+            <MainContent />
+            <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
+              sx={{
+                position: 'absolute',
+                bottom: 20,
+                right: 20,
+                zIndex: 100,
+                willChange: 'filter',
+                transition: 'filter 300ms',
+                ':hover': {
+                  filter: 'drop-shadow(0 0 0.75rem #fff)',
+                },
+              }}>
+              <LogoutIcon />
+            </Fab>
+          </Box>
         </Box>
 
       </ThemeProvider>

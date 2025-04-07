@@ -63,15 +63,18 @@ export default function PlantCard({
     <>
       <Card
         sx={{
+          width: {xs: '100%', sm: '100%', md: 'auto'},
+          height: 'auto',
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover, :active': {
             filter: 'drop-shadow(0 0 0.85rem #121212)',
           },
+          // border: '2px solid #880E4F',
         }}
       >
         <CardMedia
-          sx={{ height: 140 }}
+          sx={{ maxHeight: 140 }}
           image="/static/images/cards/contemplative-reptile.jpg"
           title={name}
         />
