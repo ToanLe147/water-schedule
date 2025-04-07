@@ -50,10 +50,11 @@ export default function MainContent() {
 
         Array.from(data).map(async (plantInfo) => {
           const imageUrl = await getPlantImage(plantInfo.image);
-          plantInfo.image = imageUrl;
-            (
-              { ...plantInfo}
-            )
+          sessionStorage.setItem(plantInfo.image, imageUrl);
+          // plantInfo.image = imageUrl;
+          //   (
+          //     { ...plantInfo}
+          //   )
         });
         setPlants(data);
         setFetchError(null);
@@ -114,7 +115,7 @@ export default function MainContent() {
                 key={keyIndex}
                 plantID={plantInfo.id}
                 name={plantInfo.name}
-                plantImage={plantInfo.image}
+                plantImage={sessionStorage.getItem(plantInfo.image)}
                 scientificName={plantInfo.scientificName}
                 drinkingDay={plantInfo.drinkingDay}
                 wateringDate={plantInfo.wateringDate}
