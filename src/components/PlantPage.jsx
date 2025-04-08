@@ -42,7 +42,43 @@ export default function PlantPage({
     setOpen(false);
   };
 
-  const [editMode, setEditMode] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPlantImageURL(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  const updatePlantInfo = async () => {
+    const { data, error } = await supabase
+      .from('plants')
+      .update({
+        name: name,
+        scientificName: scientificName,
+        drinkingDay: drinkingDay,
+        wateringDate: wateringDate,
+        drinkingPortion: drinkingPortion,
+      })
+      .eq('id', plantID)
+      .select();
+
+    if (error) {
+      alert('Error updating plant info: ' + error.message);
+    } else {
+      alert('Plant info updated successfully!');
+    }
+  }
+  const handleSubmit = () => {
+    updatePlantInfo();
+    setEditMode(true);
+    handleClose();
+  }
 
   return (
     <>
@@ -85,7 +121,6 @@ export default function PlantPage({
             <VisuallyHiddenInput
               type="file"
               onChange={(event) => console.log(event.target.files)}
-              multiple
             />
           </Button>
           <Divider sx={{ width: '100%', marginTop: 2 }}>
@@ -100,40 +135,40 @@ export default function PlantPage({
             }}
           >
             <TextField
-              disabled={editMode}
+              disabled={!editMode}
               label="ID"
               variant="standard"
               defaultValue={plantID}
             />
             <TextField
-              disabled={editMode}
+              disabled={!editMode}
               label="Scientific Name"
               variant="standard"
               defaultValue={scientificName}
             />
             <TextField
-              disabled={editMode}
+              disabled={!editMode}
               label="Drinking Day"
               variant="standard"
               defaultValue={drinkingDay}
             />
             <TextField
-              disabled={editMode}
+              disabled={!editMode}
               label="Drinking Portion"
               variant="standard"
               defaultValue={drinkingPortion}
             />
             <TextField
-              disabled={editMode}
+              disabled={!editMode}
               label="Last Watered"
               variant="standard"
               defaultValue={wateringDate}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>Edit</Button>
-            <Button hidden={!editMode} onClick={handleClose}>Close</Button>
-            <Button hidden={editMode} onClick={handleClose}>Submit</Button>
+            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>{editMode ? "Close" : "Edit"}</Button>
+            <Button sx={{display: !editMode ? "block":"none"}} onClick={handleClose}>Close</Button>
+            <Button sx={{display: editMode  ? "block":"none"}} onClick={handleSubmit}>Submit</Button>
           </DialogActions>
         </Dialog>
       </Fade >
