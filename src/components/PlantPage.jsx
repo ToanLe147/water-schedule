@@ -191,7 +191,7 @@ export default function PlantPage({
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>Edit</Button>
+            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>{ editMode ? "Done" : "Edit" }</Button>
             <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
