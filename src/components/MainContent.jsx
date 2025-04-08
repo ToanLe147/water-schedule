@@ -1,38 +1,23 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react'
 
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
+import { Box, Paper, Fab } from '@mui/material'
+import { CssBaseline } from '@mui/material'
+import { ThemeProvider } from '@mui/material/styles'
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import PlantCard from './PlantCard';
 import { supabase } from '../supabaseClient'
+import { AppContainerStyle, theme } from '../styles'
 
 
 export default function MainContent() {
+  // Fetch the plants data from Supabase
+  // and subscribe to changes
+  const [plants, setPlants] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
 
-  const [plants, setPlants] = React.useState([]);
-  const [fetchError, setFetchError] = React.useState(null);
-
-  // React.useEffect(() => {
-  //   // Fetch the plants data from Supabase
-  //   const fetchPlants = async () => {
-  //     const { data, error } = await supabase
-  //       .from('plants')
-  //       .select();
-
-  //     if (error) {
-  //       setFetchError(error);
-  //       setPlants(null);
-  //     } else {
-  //       setPlants(data);
-  //       setFetchError(null);
-  //     }
-  //   };
-
-  //   fetchPlants();
-  // }, []);
-
-  React.useEffect(() => {
+  useEffect(() => {
+    // Subscribe to changes in the plants table
     supabase
       .channel('plants')
       .on('postgres_changes', { event: '*', schema: '*' }, payload => {
@@ -52,7 +37,7 @@ export default function MainContent() {
       })
       .subscribe()
 
-      // Fetch the plants data from Supabase
+    // Fetch the plants data from Supabase
     const fetchPlants = async () => {
       const { data, error } = await supabase
         .from('plants')
@@ -62,51 +47,99 @@ export default function MainContent() {
         setFetchError(error);
         setPlants(null);
       } else {
+
+        Array.from(data).map(async (plantInfo) => {
+          const imageUrl = await getPlantImage(plantInfo.image);
+          sessionStorage.setItem(plantInfo.image, imageUrl);
+          // plantInfo.image = imageUrl;
+          //   (
+          //     { ...plantInfo}
+          //   )
+        });
         setPlants(data);
         setFetchError(null);
       }
     };
 
     fetchPlants();
+  }, []);
+
+  const getPlantImage = async (image_name) => {
+    const { data, _ } = await supabase
+      .storage
+      .from('plantimage')
+      .createSignedUrl(image_name, 60 * 60, { // 1 hour
+        transform: {
+          width: 300,
+          height: 300,
+        }
+      });
+    if (data) {
+      return (data.signedUrl)
+    }
   }
-  , []);
 
   return (
-    <Box sx={{
-      flexGrow: 1,
-    }}>
+    <ThemeProvider theme={theme}>
 
-      {fetchError && (
-        <Paper
-          elevation={0}
-          sx={{
+      <CssBaseline />
+
+      <Box sx={AppContainerStyle}>
+        {fetchError && (
+          <Paper
+            elevation={0}
+            sx={{
+              padding: 2,
+              margin: 2,
+              backgroundColor: 'transparent',
+              borderRadius: 2,
+            }}
+          >
+            <h1>Error fetching plants</h1>
+            <p>{fetchError}</p>
+          </Paper>
+        )}
+        {plants && !fetchError && (
+          <Box sx={{
+            height: '100dvh',
+            display: 'flex',
+            flexWrap: 'wrap',
+            overflow: 'auto',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 2,
             padding: 2,
-            margin: 2,
-            backgroundColor: 'transparent',
-            borderRadius: 2,
-          }}
-        >
-          <h1>Error fetching plants</h1>
-          <p>{fetchError}</p>
-        </Paper>
-      )}
-      {plants && !fetchError && (
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ sm: 1, md: 8, lg: 12 }}>
-          {Array.from(plants).map((plantInfo, keyIndex) => (
-            <Grid key={keyIndex} size={{ xs: 2, sm: 4, md: 4 }}>
+          }}>
+            {Array.from(plants).map((plantInfo, keyIndex) => (
               <PlantCard
+                key={keyIndex}
                 plantID={plantInfo.id}
                 name={plantInfo.name}
+                plantImage={sessionStorage.getItem(plantInfo.image)}
                 scientificName={plantInfo.scientificName}
                 drinkingDay={plantInfo.drinkingDay}
                 wateringDate={plantInfo.wateringDate}
                 drinkingPortion={plantInfo.drinkingPortion}
               />
-            </Grid>
-          ))}
-        </Grid>
-      )}
+            ))}
+          </Box>
+        )}
+        <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
+          sx={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            zIndex: 100,
+            willChange: 'filter',
+            transition: 'filter 300ms',
+            ':hover': {
+              filter: 'drop-shadow(0 0 0.75rem #fff)',
+            },
+          }}>
+          <LogoutIcon />
+        </Fab>
+      </Box>
 
-    </Box>
+    </ThemeProvider>
   )
 }

@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
@@ -14,6 +15,7 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { supabase } from '../supabaseClient';
+import PlantPage from './PlantPage';
 
 const WaterLevel = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -21,15 +23,18 @@ const WaterLevel = styled(Rating)({
   }
 });
 
-
 export default function PlantCard({
   plantID,
   name,
+  plantImage,
   scientificName,
   drinkingDay,
   wateringDate,
   drinkingPortion }) {
 
+  const [openPlantPage, setOpenPlantPage] = React.useState(false);
+
+  console.log('PlantCard', plantImage);
   const findPlantInfo = async () => {
     const url = `https://www.google.com/search?q=${scientificName}`;
     window.open(url, "_blank", "noreferrer");
@@ -55,26 +60,34 @@ export default function PlantCard({
       alert('Error updating watering date: ' + error.message);
     }
     if (data) {
-      alert('Watering date updated to: ', data.wateringDate);
+      alert('Watering date updated to: ', formattedDate);
     }
   }
 
   return (
     <>
+      <PlantPage open={openPlantPage} setOpen={setOpenPlantPage} plantImage={plantImage}/>
       <Card
         sx={{
+          width: { xs: '100%', sm: '100%', md: 'auto' },
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover, :active': {
-            filter: 'drop-shadow(0 0 0.85rem #121212)',
+            filter: 'drop-shadow(0 0 0.85rem #880E4F)',
           },
         }}
       >
-        <CardMedia
-          sx={{ height: 140 }}
-          image="/static/images/cards/contemplative-reptile.jpg"
-          title={name}
-        />
+        <CardActionArea onClick={() => setOpenPlantPage(true)}>
+          <CardMedia
+            component="img"
+            src={plantImage}
+            title={name}
+            sx={{
+              height: 140,
+              objectFit: 'contain',
+            }}
+          />
+        </CardActionArea>
         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'begin', justifyContent: 'space-between' }}>
           <Typography gutterBottom variant="h5" component="div">
             {name}
@@ -82,9 +95,9 @@ export default function PlantCard({
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Scientific Name: {scientificName}
           </Typography>
-          {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Drinking Day: {drinkingDay} days
-          </Typography> */}
+          </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
           </Typography>
