@@ -12,6 +12,8 @@ import Fade from '@mui/material/Fade';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Divider from '@mui/material/Divider';
 
+import { supabase } from '../supabaseClient';
+
 
 export const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -55,29 +57,48 @@ export default function PlantPage({
     }
   }
 
-  const updatePlantInfo = async () => {
-    const { data, error } = await supabase
+  const handleScientificNameChange = async (event) => {
+    const response = await supabase
       .from('plants')
-      .update({
-        name: name,
-        scientificName: scientificName,
-        drinkingDay: drinkingDay,
-        wateringDate: wateringDate,
-        drinkingPortion: drinkingPortion,
-      })
+      .update({ scientificName: event.target.value })
       .eq('id', plantID)
-      .select();
 
-    if (error) {
-      alert('Error updating plant info: ' + error.message);
-    } else {
-      alert('Plant info updated successfully!');
+    if (response.status !== 204 && event.target.value !== '') {
+      alert('Error updating scientific name');
     }
   }
-  const handleSubmit = () => {
-    updatePlantInfo();
-    setEditMode(true);
-    handleClose();
+
+  const handleDrinkingDayChange = async (event) => {
+    const response = await supabase
+      .from('plants')
+      .update({ drinkingDay: event.target.value })
+      .eq('id', plantID)
+
+    if (response.status !== 204 && event.target.value !== '') {
+      alert('Error updating drinking day');
+    }
+  }
+
+  const handleDrinkingPortionChange = async (event) => {
+    const response = await supabase
+      .from('plants')
+      .update({ drinkingPortion: event.target.value })
+      .eq('id', plantID)
+
+    if (response.status !== 204 && event.target.value !== '') {
+      alert('Error updating drinking portion');
+    }
+  }
+
+  const handleLastWateredChange = async (event) => {
+    const response = await supabase
+      .from('plants')
+      .update({ wateringDate: event.target.value })
+      .eq('id', plantID)
+
+    if (response.status !== 204 && event.target.value !== '') {
+      alert('Error updating last watered date');
+    }
   }
 
   return (
@@ -135,7 +156,7 @@ export default function PlantPage({
             }}
           >
             <TextField
-              disabled={!editMode}
+              disabled
               label="ID"
               variant="standard"
               defaultValue={plantID}
@@ -145,30 +166,33 @@ export default function PlantPage({
               label="Scientific Name"
               variant="standard"
               defaultValue={scientificName}
+              onChange={handleScientificNameChange}
             />
             <TextField
               disabled={!editMode}
-              label="Drinking Day"
+              label="Drinking Day (days)"
               variant="standard"
               defaultValue={drinkingDay}
+              onChange={handleDrinkingDayChange}
             />
             <TextField
               disabled={!editMode}
-              label="Drinking Portion"
+              label="Drinking Portion (ml - mililiters)"
               variant="standard"
               defaultValue={drinkingPortion}
+              onChange={handleDrinkingPortionChange}
             />
             <TextField
               disabled={!editMode}
               label="Last Watered"
               variant="standard"
               defaultValue={wateringDate}
+              onChange={handleLastWateredChange}
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>{editMode ? "Close" : "Edit"}</Button>
-            <Button sx={{display: !editMode ? "block":"none"}} onClick={handleClose}>Close</Button>
-            <Button sx={{display: editMode  ? "block":"none"}} onClick={handleSubmit}>Submit</Button>
+            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>Edit</Button>
+            <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
       </Fade >
