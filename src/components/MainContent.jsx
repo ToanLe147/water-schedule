@@ -15,6 +15,7 @@ export default function MainContent() {
   // and subscribe to changes
   const [plants, setPlants] = useState([]);
   const [fetchError, setFetchError] = useState(null);
+  const [plantImage, setPlantImage] = useState(false);
 
   useEffect(() => {
     // Subscribe to changes in the plants table
@@ -46,17 +47,16 @@ export default function MainContent() {
       if (error) {
         setFetchError(error);
         setPlants(null);
+        setPlantImage(false);
       } else {
-
         Array.from(data).map(async (plantInfo) => {
-          const imageUrl = await getPlantImage(plantInfo.image);
-          sessionStorage.setItem(plantInfo.image, imageUrl);
-          // plantInfo.image = imageUrl;
-          //   (
-          //     { ...plantInfo}
-          //   )
+          if (!sessionStorage.getItem(plantInfo.image)) {
+            const imageUrl = await getPlantImage(plantInfo.image);
+            sessionStorage.setItem(plantInfo.image, imageUrl);
+          }
         });
         setPlants(data);
+        setPlantImage(true);
         setFetchError(null);
       }
     };
@@ -65,13 +65,14 @@ export default function MainContent() {
   }, []);
 
   const getPlantImage = async (image_name) => {
+    const size = window.innerWidth < 900 ? 300 : 600;
     const { data, _ } = await supabase
       .storage
       .from('plantimage')
       .createSignedUrl(image_name, 60 * 60, { // 1 hour
         transform: {
-          width: 300,
-          height: 300,
+          width: size,
+          height: size,
         }
       });
     if (data) {
@@ -99,7 +100,7 @@ export default function MainContent() {
             <p>{fetchError}</p>
           </Paper>
         )}
-        {plants && !fetchError && (
+        {plantImage && !fetchError &&(
           <Box sx={{
             height: '100dvh',
             display: 'flex',
@@ -115,7 +116,7 @@ export default function MainContent() {
                 key={keyIndex}
                 plantID={plantInfo.id}
                 name={plantInfo.name}
-                plantImage={sessionStorage.getItem(plantInfo.image)}
+                plantImage={plantInfo.image}
                 scientificName={plantInfo.scientificName}
                 drinkingDay={plantInfo.drinkingDay}
                 wateringDate={plantInfo.wateringDate}
@@ -124,7 +125,7 @@ export default function MainContent() {
             ))}
           </Box>
         )}
-        <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
+        <Fab color="secondary" aria-label="out" onClick={() => { sessionStorage.clear(); supabase.auth.signOut() }}
           sx={{
             position: 'absolute',
             bottom: 20,

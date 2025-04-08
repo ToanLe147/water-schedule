@@ -6,10 +6,21 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Typography from '@mui/material/Typography';
 import Fade from '@mui/material/Fade';
 
 
-export default function PlantPage({open, setOpen, plantImage}) {
+export default function PlantPage({
+  open,
+  setOpen,
+  plantID,
+  name,
+  plantImage,
+  scientificName,
+  drinkingDay,
+  wateringDate,
+  drinkingPortion
+}) {
 
   const handleClose = () => {
     setOpen(false);
@@ -23,30 +34,55 @@ export default function PlantPage({open, setOpen, plantImage}) {
           keepMounted
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
+          sx={{
+            border: '2px solid #81C784',
+          }}
         >
-          <DialogTitle>{"This is the page for more details about the plant with bigger view"}</DialogTitle>
+          <DialogTitle variant='h4' alignSelf='center' >{"Details View"}</DialogTitle>
           <Box
             component="img"
             sx={{
-              height: 300,
-              width: 300,
-              // maxHeight: { xs: 233, md: 167 },
-              // maxWidth: { xs: 350, md: 250 },
+              height: { sm: 300, md: 600 },
+              width: { sm: 300, md: 600 },
+              justifyContent: 'center',
+              alignSelf: 'center',
+              objectFit: 'contain',
             }}
-            alt="The house from the offer."
-            src={plantImage}
+            src={sessionStorage.getItem(plantImage)}
           />
-          <DialogContent>
+          <DialogContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'begin',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography gutterBottom variant="h5" component="div">
+              {name}
+            </Typography>
             <DialogContentText id="alert-dialog-slide-description">
-              Something vo va vo van cho dai ra ay ma
+              {"ID: " + plantID}
             </DialogContentText>
+            <Typography variant="body3" sx={{ color: 'text.secondary' }}>
+              Scientific Name: {scientificName}
+            </Typography>
+            <Typography variant="body3" sx={{ color: 'text.secondary' }}>
+              Drinking Day: {drinkingDay} days
+            </Typography>
+            <Typography variant="body3" sx={{ color: 'text.secondary' }}>
+              Last Watered: {wateringDate}
+            </Typography>
+            <Typography variant="body3" sx={{ color: 'text.secondary' }}>
+              Drinking Portion: {drinkingPortion} ml
+            </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Close</Button>
             <Button onClick={handleClose}>Also Close</Button>
           </DialogActions>
         </Dialog>
-      </Fade>
+      </Fade >
     </>
   );
 }

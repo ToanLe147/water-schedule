@@ -33,8 +33,8 @@ export default function PlantCard({
   drinkingPortion }) {
 
   const [openPlantPage, setOpenPlantPage] = React.useState(false);
+  // console.log('PlantCard', plantImage);
 
-  console.log('PlantCard', plantImage);
   const findPlantInfo = async () => {
     const url = `https://www.google.com/search?q=${scientificName}`;
     window.open(url, "_blank", "noreferrer");
@@ -66,7 +66,17 @@ export default function PlantCard({
 
   return (
     <>
-      <PlantPage open={openPlantPage} setOpen={setOpenPlantPage} plantImage={plantImage}/>
+      <PlantPage
+        open={openPlantPage}
+        setOpen={setOpenPlantPage}
+        plantID={plantID}
+        name={name}
+        plantImage={plantImage}
+        scientificName={scientificName}
+        drinkingDay={drinkingDay}
+        wateringDate={wateringDate}
+        drinkingPortion={drinkingPortion}
+      />
       <Card
         sx={{
           width: { xs: '100%', sm: '100%', md: 'auto' },
@@ -80,7 +90,7 @@ export default function PlantCard({
         <CardActionArea onClick={() => setOpenPlantPage(true)}>
           <CardMedia
             component="img"
-            src={plantImage}
+            src={sessionStorage.getItem(plantImage)}
             title={name}
             sx={{
               height: 140,
@@ -95,9 +105,9 @@ export default function PlantCard({
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Scientific Name: {scientificName}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Drinking Day: {drinkingDay} days
-          </Typography>
+          </Typography> */}
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
           </Typography>
