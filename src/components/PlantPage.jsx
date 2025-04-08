@@ -46,17 +46,6 @@ export default function PlantPage({
 
   const [editMode, setEditMode] = useState(false);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPlantImageURL(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
   const handleScientificNameChange = async (event) => {
     const response = await supabase
       .from('plants')
