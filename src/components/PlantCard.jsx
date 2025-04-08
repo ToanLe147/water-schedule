@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react'
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -32,8 +32,8 @@ export default function PlantCard({
   wateringDate,
   drinkingPortion }) {
 
-  const [openPlantPage, setOpenPlantPage] = React.useState(false);
-  const [plantImageURL, setPlantImageURL] = React.useState(null);
+  const [openPlantPage, setOpenPlantPage] = useState(false);
+  const [plantImageURL, setPlantImageURL] = useState(null);
 
   const findPlantInfo = async () => {
     const url = `https://www.google.com/search?q=${scientificName}`;
@@ -64,7 +64,7 @@ export default function PlantCard({
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchImage = async () => {
       const imageUrl = await utilSupaGetImage(plantImage);
       localStorage.setItem(plantImage, imageUrl);
@@ -122,9 +122,9 @@ export default function PlantCard({
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Scientific Name: {scientificName}
           </Typography>
-          {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drinking Day: {drinkingDay} days
-          </Typography> */}
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Drinking Days: {drinkingDay} days
+          </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
           </Typography>
