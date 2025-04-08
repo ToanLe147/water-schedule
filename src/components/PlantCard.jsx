@@ -14,7 +14,7 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { supabase } from '../supabaseClient';
+import { supabase, utilSupaGetImage } from '../supabaseClient';
 import PlantPage from './PlantPage';
 
 const WaterLevel = styled(Rating)({
@@ -33,7 +33,7 @@ export default function PlantCard({
   drinkingPortion }) {
 
   const [openPlantPage, setOpenPlantPage] = React.useState(false);
-  // console.log('PlantCard', plantImage);
+  const [plantImageURL, setPlantImageURL] = React.useState(null);
 
   const findPlantInfo = async () => {
     const url = `https://www.google.com/search?q=${scientificName}`;
@@ -64,6 +64,22 @@ export default function PlantCard({
     }
   }
 
+  React.useEffect(() => {
+    const fetchImage = async () => {
+      const imageUrl = await utilSupaGetImage(plantImage);
+      localStorage.setItem(plantImage, imageUrl);
+      setPlantImageURL(imageUrl);
+    };
+
+    if (!localStorage.getItem(plantImage)) {
+      fetchImage();
+    } else {
+      const imageUrl = localStorage.getItem(plantImage);
+      setPlantImageURL(imageUrl);
+    }
+
+  }, [plantImage]);
+
   return (
     <>
       <PlantPage
@@ -71,7 +87,7 @@ export default function PlantCard({
         setOpen={setOpenPlantPage}
         plantID={plantID}
         name={name}
-        plantImage={plantImage}
+        plantImageURL={plantImageURL}
         scientificName={scientificName}
         drinkingDay={drinkingDay}
         wateringDate={wateringDate}
@@ -90,8 +106,9 @@ export default function PlantCard({
         <CardActionArea onClick={() => setOpenPlantPage(true)}>
           <CardMedia
             component="img"
-            src={sessionStorage.getItem(plantImage)}
+            src={plantImageURL}
             title={name}
+            loading='lazy'
             sx={{
               height: 140,
               objectFit: 'contain',

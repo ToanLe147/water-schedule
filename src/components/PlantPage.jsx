@@ -15,7 +15,7 @@ export default function PlantPage({
   setOpen,
   plantID,
   name,
-  plantImage,
+  plantImageURL,
   scientificName,
   drinkingDay,
   wateringDate,
@@ -34,9 +34,9 @@ export default function PlantPage({
           keepMounted
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
-          sx={{
-            border: '2px solid #81C784',
-          }}
+          // sx={{
+          //   border: '2px solid #81C784',
+          // }}
         >
           <DialogTitle variant='h4' alignSelf='center' >{"Details View"}</DialogTitle>
           <Box
@@ -48,7 +48,8 @@ export default function PlantPage({
               alignSelf: 'center',
               objectFit: 'contain',
             }}
-            src={sessionStorage.getItem(plantImage)}
+            loading='lazy'
+            src={plantImageURL}
           />
           <DialogContent
             sx={{

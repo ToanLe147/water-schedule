@@ -15,7 +15,6 @@ export default function MainContent() {
   // and subscribe to changes
   const [plants, setPlants] = useState([]);
   const [fetchError, setFetchError] = useState(null);
-  const [plantImage, setPlantImage] = useState(false);
 
   useEffect(() => {
     // Subscribe to changes in the plants table
@@ -47,38 +46,14 @@ export default function MainContent() {
       if (error) {
         setFetchError(error);
         setPlants(null);
-        setPlantImage(false);
       } else {
-        Array.from(data).map(async (plantInfo) => {
-          if (!sessionStorage.getItem(plantInfo.image)) {
-            const imageUrl = await getPlantImage(plantInfo.image);
-            sessionStorage.setItem(plantInfo.image, imageUrl);
-          }
-        });
         setPlants(data);
-        setPlantImage(true);
         setFetchError(null);
       }
     };
 
     fetchPlants();
   }, []);
-
-  const getPlantImage = async (image_name) => {
-    const size = window.innerWidth < 900 ? 300 : 600;
-    const { data, _ } = await supabase
-      .storage
-      .from('plantimage')
-      .createSignedUrl(image_name, 60 * 60, { // 1 hour
-        transform: {
-          width: size,
-          height: size,
-        }
-      });
-    if (data) {
-      return (data.signedUrl)
-    }
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,7 +75,7 @@ export default function MainContent() {
             <p>{fetchError}</p>
           </Paper>
         )}
-        {plantImage && !fetchError &&(
+        {plants && !fetchError && (
           <Box sx={{
             height: '100dvh',
             display: 'flex',
@@ -125,7 +100,7 @@ export default function MainContent() {
             ))}
           </Box>
         )}
-        <Fab color="secondary" aria-label="out" onClick={() => { sessionStorage.clear(); supabase.auth.signOut() }}
+        <Fab color="secondary" aria-label="out" onClick={() => { localStorage.clear(); supabase.auth.signOut() }}
           sx={{
             position: 'absolute',
             bottom: 20,
