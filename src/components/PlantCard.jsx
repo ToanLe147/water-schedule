@@ -78,7 +78,7 @@ export default function PlantCard({
       setPlantImageURL(imageUrl);
     }
 
-  }, [plantImage]);
+  }, [plantImage, plantImageURL]);
 
   return (
     <>
@@ -87,11 +87,12 @@ export default function PlantCard({
         setOpen={setOpenPlantPage}
         plantID={plantID}
         name={name}
-        plantImageURL={plantImageURL}
+        plantImage={plantImage}
         scientificName={scientificName}
         drinkingDay={drinkingDay}
         wateringDate={wateringDate}
         drinkingPortion={drinkingPortion}
+        updatePlantCardImageURL={setPlantImageURL}
       />
       <Card
         sx={{

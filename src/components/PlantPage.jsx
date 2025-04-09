@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -15,7 +15,7 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { supabase } from '../supabaseClient';
+import { supabase, utilSupaGetImage } from '../supabaseClient';
 
 
 export const VisuallyHiddenInput = styled('input')({
@@ -36,11 +36,12 @@ export default function PlantPage({
   setOpen,
   plantID,
   name,
-  plantImageURL,
+  plantImage,
   scientificName,
   drinkingDay,
   wateringDate,
-  drinkingPortion
+  drinkingPortion,
+  updatePlantCardImageURL
 }) {
 
   const handleClose = () => {
@@ -49,6 +50,7 @@ export default function PlantPage({
     setOpen(false);
   };
 
+  const [plantImageURL, setPlantImageURL] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
     scientificName: scientificName,
@@ -142,6 +144,83 @@ export default function PlantPage({
     reloadEditedInfoValue()
   }
 
+  const handleImageUpload = async (event) => {
+    const uploadImage = event.target.files[0];
+    const fileExt = uploadImage.name.split(".").pop();
+    const filePath = `${plantID}.${fileExt}`
+
+    const deleteResponse = await supabase
+      .storage
+      .from('plantimage')
+      .remove([plantImage])
+
+    if (deleteResponse.error) {
+      setUpdateNoti({
+        open: true,
+        message: 'Error during updating progress' + deleteResponse.error,
+        severity: 'error'
+      })
+    }
+
+    localStorage.removeItem(plantImage)
+
+    const uploadResponse = await supabase
+      .storage
+      .from('plantimage')
+      .upload(filePath, uploadImage, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (uploadResponse.error) {
+      setUpdateNoti({
+        open: true,
+        message: 'Error during updating progress' + uploadResponse.error,
+        severity: 'error'
+      })
+    }
+
+    const updateResponse = await supabase
+      .from('plants')
+      .update({ image: filePath })
+      .eq('id', plantID)
+
+    if (updateResponse.status === 204) {
+      const imageUrl = await utilSupaGetImage(plantImage);
+      localStorage.setItem(plantImage, imageUrl);
+      setPlantImageURL(imageUrl);
+      updatePlantCardImageURL(imageUrl);
+
+      setUpdateNoti({
+        open: true,
+        message: 'Update plant image successfully.',
+        severity: 'success'
+      });
+    } else {
+      setUpdateNoti({
+        open: true,
+        message: 'Failed to update plant image.',
+        severity: 'error'
+      });
+    }
+  }
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const imageUrl = await utilSupaGetImage(plantImage);
+      localStorage.setItem(plantImage, imageUrl);
+      setPlantImageURL(imageUrl);
+    };
+
+    if (!localStorage.getItem(plantImage)) {
+      fetchImage();
+    } else {
+      const imageUrl = localStorage.getItem(plantImage);
+      setPlantImageURL(imageUrl);
+    }
+
+  }, [plantImage, updatePlantCardImageURL]);
+
   return (
     <>
       <Fade in={open}>
@@ -179,7 +258,7 @@ export default function PlantPage({
             Upload image
             <VisuallyHiddenInput
               type="file"
-              onChange={(event) => console.log(event.target.files)}
+              onChange={handleImageUpload}
             />
           </Button>
           <Divider sx={{ width: '100%', marginTop: 2 }}>
@@ -254,8 +333,8 @@ export default function PlantPage({
             {updateNoti.message}
           </Alert>
           <DialogActions>
-            <Button onClick={() => {reloadEditedInfoValue; setEditMode((prevMode) => !prevMode)}}>{editMode ? "Back" : "Edit"}</Button>
-            <Button onClick={() => {submitUpdateInfo; setEditMode((prevMode) => !prevMode)}} disabled={!editMode}>Submit</Button>
+            <Button onClick={() => { reloadEditedInfoValue; setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
+            <Button onClick={() => { submitUpdateInfo; setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>
             <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
