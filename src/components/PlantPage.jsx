@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -50,7 +50,7 @@ export default function PlantPage({
     setOpen(false);
   };
 
-  const [plantImageURL, setPlantImageURL] = useState(null);
+  const [plantImageURL, setPlantImageURL] = useState(localStorage.getItem(plantImage));
   const [editMode, setEditMode] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
     scientificName: scientificName,
@@ -205,22 +205,6 @@ export default function PlantPage({
     }
   }
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      const imageUrl = await utilSupaGetImage(plantImage);
-      localStorage.setItem(plantImage, imageUrl);
-      setPlantImageURL(imageUrl);
-    };
-
-    if (!localStorage.getItem(plantImage)) {
-      fetchImage();
-    } else {
-      const imageUrl = localStorage.getItem(plantImage);
-      setPlantImageURL(imageUrl);
-    }
-
-  }, [plantImage, updatePlantCardImageURL]);
-
   return (
     <>
       <Fade in={open}>
@@ -270,7 +254,6 @@ export default function PlantPage({
               flexDirection: 'column',
               gap: 2,
               overflow: 'auto',
-              // border: '1px solid #81C784',
             }}
           >
             <TextField
@@ -278,7 +261,6 @@ export default function PlantPage({
               label="Scientific Name"
               variant="outlined"
               name='scientificName'
-              // defaultValue={scientificName}
               value={updateInfo.scientificName}
               onChange={handleUpdateInfo}
             />
@@ -287,7 +269,6 @@ export default function PlantPage({
               label="Drinking Day (days)"
               variant="outlined"
               name='drinkingDay'
-              // defaultValue={drinkingDay}
               value={updateInfo.drinkingDay}
               onChange={handleUpdateInfo}
             />
@@ -296,7 +277,6 @@ export default function PlantPage({
               label="Drinking Portion (ml - mililiters)"
               variant="outlined"
               name='drinkingPortion'
-              // defaultValue={drinkingPortion}
               value={updateInfo.drinkingPortion}
               onChange={handleUpdateInfo}
             />
@@ -305,7 +285,6 @@ export default function PlantPage({
               label="Last Watered"
               variant="outlined"
               name='wateringDate'
-              // defaultValue={wateringDate}
               value={updateInfo.wateringDate}
               onChange={handleUpdateInfo}
             />
@@ -333,8 +312,8 @@ export default function PlantPage({
             {updateNoti.message}
           </Alert>
           <DialogActions>
-            <Button onClick={() => { reloadEditedInfoValue; setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
-            <Button onClick={() => { submitUpdateInfo; setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>
+            <Button onClick={() => { reloadEditedInfoValue(); setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
+            <Button onClick={() => { submitUpdateInfo(); setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>
             <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
