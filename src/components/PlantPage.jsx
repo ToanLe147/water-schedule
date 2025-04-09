@@ -149,17 +149,19 @@ export default function PlantPage({
     const fileExt = uploadImage.name.split(".").pop();
     const filePath = `${plantID}.${fileExt}`
 
-    const deleteResponse = await supabase
-      .storage
-      .from('plantimage')
-      .remove([plantImage])
+    if (plantImage !== 'noimage.png') {
+      const deleteResponse = await supabase
+        .storage
+        .from('plantimage')
+        .remove([plantImage])
 
-    if (deleteResponse.error) {
-      setUpdateNoti({
-        open: true,
-        message: 'Error during updating progress' + deleteResponse.error,
-        severity: 'error'
-      })
+      if (deleteResponse.error) {
+        setUpdateNoti({
+          open: true,
+          message: 'Error during updating progress' + deleteResponse.error,
+          severity: 'error'
+        })
+      }
     }
 
     localStorage.removeItem(plantImage)
@@ -257,6 +259,7 @@ export default function PlantPage({
             }}
           >
             <TextField
+              autoFocus
               disabled={!editMode}
               label="Scientific Name"
               variant="outlined"
@@ -265,6 +268,7 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
             <TextField
+              autoFocus
               disabled={!editMode}
               label="Drinking Day (days)"
               variant="outlined"
@@ -273,6 +277,7 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
             <TextField
+              autoFocus
               disabled={!editMode}
               label="Drinking Portion (ml - mililiters)"
               variant="outlined"
@@ -281,6 +286,7 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
             <TextField
+              autoFocus
               disabled={!editMode}
               label="Last Watered"
               variant="outlined"
@@ -312,9 +318,9 @@ export default function PlantPage({
             {updateNoti.message}
           </Alert>
           <DialogActions>
-            <Button onClick={() => { reloadEditedInfoValue(); setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
-            <Button onClick={() => { submitUpdateInfo(); setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>
-            <Button onClick={handleClose}>Close</Button>
+            <Button variant='outlined' onClick={() => { reloadEditedInfoValue(); setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
+            <Button variant='outlined' onClick={() => { submitUpdateInfo(); setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>
+            <Button color='error' variant='outlined' onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
       </Fade >

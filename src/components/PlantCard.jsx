@@ -145,8 +145,8 @@ export default function PlantCard({
           />
         </CardContent>
         <CardActions>
-          <Button variant="contained" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
-          <Button variant="contained" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
+          <Button variant="outlined" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
+          <Button variant="outlined" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
         </CardActions>
       </Card>
     </>

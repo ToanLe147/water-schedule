@@ -8,6 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PlantCard from './PlantCard';
 import { supabase } from '../supabaseClient'
 import { AppContainerStyle, theme } from '../styles'
+import UserSpeedDial from './SpeedDial';
 
 
 export default function MainContent() {
@@ -100,20 +101,7 @@ export default function MainContent() {
             ))}
           </Box>
         )}
-        <Fab color="secondary" aria-label="out" onClick={() => { localStorage.clear(); supabase.auth.signOut() }}
-          sx={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            zIndex: 100,
-            willChange: 'filter',
-            transition: 'filter 300ms',
-            ':hover': {
-              filter: 'drop-shadow(0 0 0.75rem #fff)',
-            },
-          }}>
-          <LogoutIcon />
-        </Fab>
+        <UserSpeedDial />
       </Box>
 
     </ThemeProvider>
