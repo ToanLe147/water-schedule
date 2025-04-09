@@ -11,6 +11,9 @@ import TextField from '@mui/material/TextField';
 import Fade from '@mui/material/Fade';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Divider from '@mui/material/Divider';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { supabase } from '../supabaseClient';
 
@@ -45,49 +48,92 @@ export default function PlantPage({
   };
 
   const [editMode, setEditMode] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState({
+    scientificName: null,
+    drinkingDay: null,
+    wateringDate: null,
+    drinkingPortion: null
+  });
+  const [updateNoti, setUpdateNoti] = useState({
+    open: false,
+    message: 'There is no update',
+    severity: 'info'
+  });
 
-  const handleScientificNameChange = async (event) => {
-    const response = await supabase
-      .from('plants')
-      .update({ scientificName: event.target.value })
-      .eq('id', plantID)
-
-    if (response.status !== 204 && event.target.value !== '') {
-      alert('Error updating scientific name');
-    }
+  const handleUpdateInfo = (event) => {
+    setUpdateInfo({
+      ...updateInfo,
+      [event.target.name]: event.target.value
+    });
   }
 
-  const handleDrinkingDayChange = async (event) => {
-    const response = await supabase
-      .from('plants')
-      .update({ drinkingDay: event.target.value })
-      .eq('id', plantID)
+  const submitUpdateInfo = async () => {
 
-    if (response.status !== 204 && event.target.value !== '') {
-      alert('Error updating drinking day');
+    var updateStatus = true;
+
+    if (updateInfo.scientificName !== null) {
+      const response = await supabase
+        .from('plants')
+        .update({ scientificName: updateInfo.scientificName })
+        .eq('id', plantID)
+
+      if (response.status !== 204) {
+        updateStatus = false;
+      }
     }
-  }
 
-  const handleDrinkingPortionChange = async (event) => {
-    const response = await supabase
-      .from('plants')
-      .update({ drinkingPortion: event.target.value })
-      .eq('id', plantID)
+    if (updateInfo.drinkingDay !== null) {
+      const response = await supabase
+        .from('plants')
+        .update({ drinkingDay: updateInfo.drinkingDay })
+        .eq('id', plantID)
 
-    if (response.status !== 204 && event.target.value !== '') {
-      alert('Error updating drinking portion');
+      if (response.status !== 204) {
+        updateStatus = false;
+      }
     }
-  }
 
-  const handleLastWateredChange = async (event) => {
-    const response = await supabase
-      .from('plants')
-      .update({ wateringDate: event.target.value })
-      .eq('id', plantID)
+    if (updateInfo.wateringDate !== null) {
+      const response = await supabase
+        .from('plants')
+        .update({ wateringDate: updateInfo.wateringDate })
+        .eq('id', plantID)
 
-    if (response.status !== 204 && event.target.value !== '') {
-      alert('Error updating last watered date');
+      if (response.status !== 204) {
+        updateStatus = false;
+      }
     }
+
+    if (updateInfo.drinkingPortion !== null) {
+      const response = await supabase
+        .from('plants')
+        .update({ drinkingPortion: updateInfo.drinkingPortion })
+        .eq('id', plantID)
+      if (response.status !== 204) {
+        updateStatus = false;
+      }
+    }
+
+    if (updateStatus) {
+      setUpdateNoti({
+        open: true,
+        message: 'Update plant info successfully.',
+        severity: 'success'
+      });
+    } else {
+      setUpdateNoti({
+        open: true,
+        message: 'Failed to update plant info.',
+        severity: 'error'
+      });
+    }
+
+    setUpdateInfo({
+      scientificName: null,
+      drinkingDay: null,
+      wateringDate: null,
+      drinkingPortion: null
+    })
   }
 
   return (
@@ -98,9 +144,6 @@ export default function PlantPage({
           keepMounted
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
-        // sx={{
-        //   border: '2px solid #81C784',
-        // }}
         >
           <DialogTitle variant='h4' alignSelf='center' >{name}</DialogTitle>
           <Box
@@ -134,7 +177,7 @@ export default function PlantPage({
             />
           </Button>
           <Divider sx={{ width: '100%', marginTop: 2 }}>
-            Plant Info
+            Plant ID: {plantID}
           </Divider>
           <DialogContent
             sx={{
@@ -142,45 +185,67 @@ export default function PlantPage({
               flexDirection: 'column',
               gap: 2,
               overflow: 'auto',
+              // border: '1px solid #81C784',
             }}
           >
             <TextField
-              disabled
-              label="ID"
-              variant="standard"
-              defaultValue={plantID}
-            />
-            <TextField
               disabled={!editMode}
               label="Scientific Name"
-              variant="standard"
+              variant="outlined"
+              name='scientificName'
               defaultValue={scientificName}
-              onChange={handleScientificNameChange}
+              onChange={handleUpdateInfo}
             />
             <TextField
               disabled={!editMode}
               label="Drinking Day (days)"
-              variant="standard"
+              variant="outlined"
+              name='drinkingDay'
               defaultValue={drinkingDay}
-              onChange={handleDrinkingDayChange}
+              onChange={handleUpdateInfo}
             />
             <TextField
               disabled={!editMode}
               label="Drinking Portion (ml - mililiters)"
-              variant="standard"
+              variant="outlined"
+              name='drinkingPortion'
               defaultValue={drinkingPortion}
-              onChange={handleDrinkingPortionChange}
+              onChange={handleUpdateInfo}
             />
             <TextField
               disabled={!editMode}
               label="Last Watered"
-              variant="standard"
+              variant="outlined"
+              name='wateringDate'
               defaultValue={wateringDate}
-              onChange={handleLastWateredChange}
+              onChange={handleUpdateInfo}
             />
           </DialogContent>
+          <Alert
+            sx={{ display: updateNoti.open ? 'flex' : 'none', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 2 }}
+            severity={updateNoti.severity}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setUpdateNoti({
+                    open: false,
+                    message: 'There is no update',
+                    severity: 'info'
+                  });
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {updateNoti.message}
+          </Alert>
           <DialogActions>
-            <Button onClick={() => setEditMode((prevMode) => !prevMode)}>{ editMode ? "Done" : "Edit" }</Button>
+            <Button onClick={() => setEditMode((prevMode) => !prevMode) }>{editMode ? "Back" : "Edit"}</Button>
+            <Button onClick={submitUpdateInfo} disabled={!editMode}>Submit</Button>
             <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
