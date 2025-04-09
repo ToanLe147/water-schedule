@@ -44,15 +44,17 @@ export default function PlantPage({
 }) {
 
   const handleClose = () => {
+    reloadEditedInfoValue();
+    setEditMode(false);
     setOpen(false);
   };
 
   const [editMode, setEditMode] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
-    scientificName: null,
-    drinkingDay: null,
-    wateringDate: null,
-    drinkingPortion: null
+    scientificName: scientificName,
+    drinkingDay: drinkingDay,
+    wateringDate: wateringDate,
+    drinkingPortion: drinkingPortion
   });
   const [updateNoti, setUpdateNoti] = useState({
     open: false,
@@ -67,11 +69,20 @@ export default function PlantPage({
     });
   }
 
+  const reloadEditedInfoValue = () => {
+    setUpdateInfo({
+      scientificName: scientificName,
+      drinkingDay: drinkingDay,
+      wateringDate: wateringDate,
+      drinkingPortion: drinkingPortion
+    })
+  }
+
   const submitUpdateInfo = async () => {
 
     var updateStatus = true;
 
-    if (updateInfo.scientificName !== null) {
+    if (updateInfo.scientificName !== scientificName) {
       const response = await supabase
         .from('plants')
         .update({ scientificName: updateInfo.scientificName })
@@ -82,7 +93,7 @@ export default function PlantPage({
       }
     }
 
-    if (updateInfo.drinkingDay !== null) {
+    if (updateInfo.drinkingDay !== drinkingDay) {
       const response = await supabase
         .from('plants')
         .update({ drinkingDay: updateInfo.drinkingDay })
@@ -93,7 +104,7 @@ export default function PlantPage({
       }
     }
 
-    if (updateInfo.wateringDate !== null) {
+    if (updateInfo.wateringDate !== wateringDate) {
       const response = await supabase
         .from('plants')
         .update({ wateringDate: updateInfo.wateringDate })
@@ -104,7 +115,7 @@ export default function PlantPage({
       }
     }
 
-    if (updateInfo.drinkingPortion !== null) {
+    if (updateInfo.drinkingPortion !== drinkingPortion) {
       const response = await supabase
         .from('plants')
         .update({ drinkingPortion: updateInfo.drinkingPortion })
@@ -128,12 +139,7 @@ export default function PlantPage({
       });
     }
 
-    setUpdateInfo({
-      scientificName: null,
-      drinkingDay: null,
-      wateringDate: null,
-      drinkingPortion: null
-    })
+    reloadEditedInfoValue()
   }
 
   return (
@@ -193,7 +199,8 @@ export default function PlantPage({
               label="Scientific Name"
               variant="outlined"
               name='scientificName'
-              defaultValue={scientificName}
+              // defaultValue={scientificName}
+              value={updateInfo.scientificName}
               onChange={handleUpdateInfo}
             />
             <TextField
@@ -201,7 +208,8 @@ export default function PlantPage({
               label="Drinking Day (days)"
               variant="outlined"
               name='drinkingDay'
-              defaultValue={drinkingDay}
+              // defaultValue={drinkingDay}
+              value={updateInfo.drinkingDay}
               onChange={handleUpdateInfo}
             />
             <TextField
@@ -209,7 +217,8 @@ export default function PlantPage({
               label="Drinking Portion (ml - mililiters)"
               variant="outlined"
               name='drinkingPortion'
-              defaultValue={drinkingPortion}
+              // defaultValue={drinkingPortion}
+              value={updateInfo.drinkingPortion}
               onChange={handleUpdateInfo}
             />
             <TextField
@@ -217,7 +226,8 @@ export default function PlantPage({
               label="Last Watered"
               variant="outlined"
               name='wateringDate'
-              defaultValue={wateringDate}
+              // defaultValue={wateringDate}
+              value={updateInfo.wateringDate}
               onChange={handleUpdateInfo}
             />
           </DialogContent>
@@ -244,8 +254,8 @@ export default function PlantPage({
             {updateNoti.message}
           </Alert>
           <DialogActions>
-            <Button onClick={() => setEditMode((prevMode) => !prevMode) }>{editMode ? "Back" : "Edit"}</Button>
-            <Button onClick={submitUpdateInfo} disabled={!editMode}>Submit</Button>
+            <Button onClick={() => {reloadEditedInfoValue; setEditMode((prevMode) => !prevMode)}}>{editMode ? "Back" : "Edit"}</Button>
+            <Button onClick={() => {submitUpdateInfo; setEditMode((prevMode) => !prevMode)}} disabled={!editMode}>Submit</Button>
             <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
