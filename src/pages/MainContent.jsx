@@ -5,9 +5,10 @@ import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import PlantCard from './PlantCard';
+import PlantCard from '../components/PlantCard';
 import { supabase } from '../supabaseClient'
 import { AppContainerStyle, theme } from '../styles'
+import UserSpeedDial from '../components/SpeedDial';
 
 
 export default function MainContent() {
@@ -47,15 +48,6 @@ export default function MainContent() {
         setFetchError(error);
         setPlants(null);
       } else {
-
-        Array.from(data).map(async (plantInfo) => {
-          const imageUrl = await getPlantImage(plantInfo.image);
-          sessionStorage.setItem(plantInfo.image, imageUrl);
-          // plantInfo.image = imageUrl;
-          //   (
-          //     { ...plantInfo}
-          //   )
-        });
         setPlants(data);
         setFetchError(null);
       }
@@ -63,21 +55,6 @@ export default function MainContent() {
 
     fetchPlants();
   }, []);
-
-  const getPlantImage = async (image_name) => {
-    const { data, _ } = await supabase
-      .storage
-      .from('plantimage')
-      .createSignedUrl(image_name, 60 * 60, { // 1 hour
-        transform: {
-          width: 300,
-          height: 300,
-        }
-      });
-    if (data) {
-      return (data.signedUrl)
-    }
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -115,7 +92,7 @@ export default function MainContent() {
                 key={keyIndex}
                 plantID={plantInfo.id}
                 name={plantInfo.name}
-                plantImage={sessionStorage.getItem(plantInfo.image)}
+                plantImage={plantInfo.image}
                 scientificName={plantInfo.scientificName}
                 drinkingDay={plantInfo.drinkingDay}
                 wateringDate={plantInfo.wateringDate}
@@ -124,20 +101,7 @@ export default function MainContent() {
             ))}
           </Box>
         )}
-        <Fab color="secondary" aria-label="out" onClick={() => supabase.auth.signOut()}
-          sx={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            zIndex: 100,
-            willChange: 'filter',
-            transition: 'filter 300ms',
-            ':hover': {
-              filter: 'drop-shadow(0 0 0.75rem #fff)',
-            },
-          }}>
-          <LogoutIcon />
-        </Fab>
+        <UserSpeedDial plantsList={plants} />
       </Box>
 
     </ThemeProvider>

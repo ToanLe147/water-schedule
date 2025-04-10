@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react'
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -14,8 +14,8 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { supabase } from '../supabaseClient';
-import PlantPage from './PlantPage';
+import { supabase, utilSupaGetImage } from '../supabaseClient';
+import PlantPage from '../pages/PlantPage';
 
 const WaterLevel = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -32,9 +32,9 @@ export default function PlantCard({
   wateringDate,
   drinkingPortion }) {
 
-  const [openPlantPage, setOpenPlantPage] = React.useState(false);
+  const [openPlantPage, setOpenPlantPage] = useState(false);
+  const [plantImageURL, setPlantImageURL] = useState(null);
 
-  console.log('PlantCard', plantImage);
   const findPlantInfo = async () => {
     const url = `https://www.google.com/search?q=${scientificName}`;
     window.open(url, "_blank", "noreferrer");
@@ -64,9 +64,36 @@ export default function PlantCard({
     }
   }
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      const imageUrl = await utilSupaGetImage(plantImage);
+      localStorage.setItem(plantImage, imageUrl);
+      setPlantImageURL(imageUrl);
+    };
+
+    if (!localStorage.getItem(plantImage)) {
+      fetchImage();
+    } else {
+      const imageUrl = localStorage.getItem(plantImage);
+      setPlantImageURL(imageUrl);
+    }
+
+  }, [plantImage, plantImageURL]);
+
   return (
     <>
-      <PlantPage open={openPlantPage} setOpen={setOpenPlantPage} plantImage={plantImage}/>
+      <PlantPage
+        open={openPlantPage}
+        setOpen={setOpenPlantPage}
+        plantID={plantID}
+        name={name}
+        plantImage={plantImage}
+        scientificName={scientificName}
+        drinkingDay={drinkingDay}
+        wateringDate={wateringDate}
+        drinkingPortion={drinkingPortion}
+        updatePlantCardImageURL={setPlantImageURL}
+      />
       <Card
         sx={{
           width: { xs: '100%', sm: '100%', md: 'auto' },
@@ -80,8 +107,9 @@ export default function PlantCard({
         <CardActionArea onClick={() => setOpenPlantPage(true)}>
           <CardMedia
             component="img"
-            src={plantImage}
+            src={plantImageURL}
             title={name}
+            loading='lazy'
             sx={{
               height: 140,
               objectFit: 'contain',
@@ -96,7 +124,7 @@ export default function PlantCard({
             Scientific Name: {scientificName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drinking Day: {drinkingDay} days
+            Drinking Days: {drinkingDay} days
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
@@ -117,8 +145,8 @@ export default function PlantCard({
           />
         </CardContent>
         <CardActions>
-          <Button variant="contained" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
-          <Button variant="contained" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
+          <Button variant="outlined" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
+          <Button variant="outlined" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
         </CardActions>
       </Card>
     </>
