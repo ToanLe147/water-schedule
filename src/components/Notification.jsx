@@ -14,7 +14,6 @@ export default function CustomNoti({
       severity={notiInfo.severity}
       action={
         <IconButton
-          aria-label="close"
           color="inherit"
           size="small"
           onClick={() => {

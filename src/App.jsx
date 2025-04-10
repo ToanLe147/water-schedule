@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Login from './Login'
 import ResetPassword from './ResetPassword'
-import MainContent from './components/MainContent'
+import MainContent from './pages/MainContent'
 import { AuthProvider } from './Auth'
 
 

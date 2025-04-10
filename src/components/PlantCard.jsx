@@ -15,7 +15,7 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
-import PlantPage from './PlantPage';
+import PlantPage from '../pages/PlantPage';
 
 const WaterLevel = styled(Rating)({
   '& .MuiRating-iconFilled': {

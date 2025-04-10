@@ -13,7 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Divider from '@mui/material/Divider';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
-import CustomNoti from './Notification'
+import CustomNoti from '../components/Notification'
 
 
 export const VisuallyHiddenInput = styled('input')({
@@ -228,7 +228,6 @@ export default function PlantPage({
           open={open}
           keepMounted
           onClose={handleClose}
-          aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle variant='h4' alignSelf='center' >{name}</DialogTitle>
           <Box

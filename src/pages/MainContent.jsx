@@ -5,10 +5,10 @@ import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import PlantCard from './PlantCard';
+import PlantCard from '../components/PlantCard';
 import { supabase } from '../supabaseClient'
 import { AppContainerStyle, theme } from '../styles'
-import UserSpeedDial from './SpeedDial';
+import UserSpeedDial from '../components/SpeedDial';
 
 
 export default function MainContent() {
@@ -101,7 +101,7 @@ export default function MainContent() {
             ))}
           </Box>
         )}
-        <UserSpeedDial />
+        <UserSpeedDial plantsList={plants} />
       </Box>
 
     </ThemeProvider>
