@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
+import { useState } from 'react';
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+
 import { supabase } from '../supabaseClient';
+
 
 export default function NewPlantPage({ open, setOpen }) {
   const [formData, setFormData] = useState({
     name: '',
     scientificName: '',
-    drinkingDay: '',
-    wateringDate: '',
-    drinkingPortion: '',
+    drinkingDay: '7',
+    wateringDate: '2025-04-30',
+    drinkingPortion: '100',
   });
 
   const handleClose = () => {
@@ -28,27 +36,30 @@ export default function NewPlantPage({ open, setOpen }) {
   };
 
   const handleSubmit = async () => {
-    console.log('Form Data:', formData);
 
-    const { data, error } = await supabase
-      .from('countries')
+    const response = await supabase
+      .from('plants')
       .insert(formData)
-      .select()
+
+    if (response.statusText !== "Created" || response.status !== 201) {
+      alert("Cannot create new plant, there is something wrong.")
+    }
 
     setFormData({
       name: '',
       scientificName: '',
-      drinkingDay: '',
-      wateringDate: '',
-      drinkingPortion: '',
+      drinkingDay: '7',
+      wateringDate: '2025-04-30',
+      drinkingPortion: '100',
     });
+
     handleClose();
   };
 
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add a New Plant</DialogTitle>
+        <DialogTitle alignSelf='center' >Add New Plant</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus

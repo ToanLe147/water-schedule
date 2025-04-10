@@ -11,11 +11,9 @@ import TextField from '@mui/material/TextField';
 import Fade from '@mui/material/Fade';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Divider from '@mui/material/Divider';
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
+import CustomNoti from './Notification'
 
 
 export const VisuallyHiddenInput = styled('input')({
@@ -142,6 +140,14 @@ export default function PlantPage({
     }
 
     reloadEditedInfoValue()
+
+    setTimeout(() => {
+      setUpdateNoti({
+        open: false,
+        message: 'There is no update',
+        severity: 'info'
+      })
+    }, 3000)
   }
 
   const handleImageUpload = async (event) => {
@@ -188,8 +194,8 @@ export default function PlantPage({
       .eq('id', plantID)
 
     if (updateResponse.status === 204) {
-      const imageUrl = await utilSupaGetImage(plantImage);
-      localStorage.setItem(plantImage, imageUrl);
+      const imageUrl = await utilSupaGetImage(filePath);
+      localStorage.setItem(filePath, imageUrl);
       setPlantImageURL(imageUrl);
       updatePlantCardImageURL(imageUrl);
 
@@ -205,6 +211,14 @@ export default function PlantPage({
         severity: 'error'
       });
     }
+
+    setTimeout(() => {
+      setUpdateNoti({
+        open: false,
+        message: 'There is no update',
+        severity: 'info'
+      })
+    }, 3000)
   }
 
   return (
@@ -295,28 +309,7 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
           </DialogContent>
-          <Alert
-            sx={{ display: updateNoti.open ? 'flex' : 'none', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 2 }}
-            severity={updateNoti.severity}
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setUpdateNoti({
-                    open: false,
-                    message: 'There is no update',
-                    severity: 'info'
-                  });
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            {updateNoti.message}
-          </Alert>
+          <CustomNoti notiInfo={updateNoti} setNotiInfo={setUpdateNoti} />
           <DialogActions>
             <Button variant='outlined' onClick={() => { reloadEditedInfoValue(); setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
             <Button variant='outlined' onClick={() => { submitUpdateInfo(); setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>

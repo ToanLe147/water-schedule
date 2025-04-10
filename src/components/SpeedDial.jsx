@@ -6,6 +6,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import YardIcon from '@mui/icons-material/Yard';
 import LogoutIcon from '@mui/icons-material/Logout';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { supabase } from '../supabaseClient';
 import NewPlantPage from './NewPlantPage';
@@ -21,6 +22,7 @@ export default function UserSpeedDial() {
   const actions = [
     { icon: <LogoutIcon />, name: 'Logout', onClick: () => { localStorage.clear(); supabase.auth.signOut() } },
     { icon: <YardIcon />, name: 'Add New Plant', onClick: () => { setOpenNewPlantPage(true), handleClose() } },
+    { icon: <DeleteForeverIcon />, name: 'Delete', onClick: () => { setOpenNewPlantPage(true), handleClose() } },
   ];
 
   return (
