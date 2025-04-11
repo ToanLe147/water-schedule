@@ -39,7 +39,8 @@ export default function PlantPage({
   drinkingDay,
   wateringDate,
   drinkingPortion,
-  updatePlantCardImageURL
+  plantImageURL,
+  setPlantImageURL
 }) {
 
   const handleClose = () => {
@@ -48,7 +49,6 @@ export default function PlantPage({
     setOpen(false);
   };
 
-  const [plantImageURL, setPlantImageURL] = useState(localStorage.getItem(plantImage));
   const [editMode, setEditMode] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
     scientificName: scientificName,
@@ -170,8 +170,6 @@ export default function PlantPage({
       }
     }
 
-    localStorage.removeItem(plantImage)
-
     const uploadResponse = await supabase
       .storage
       .from('plantimage')
@@ -195,9 +193,7 @@ export default function PlantPage({
 
     if (updateResponse.status === 204) {
       const imageUrl = await utilSupaGetImage(filePath);
-      localStorage.setItem(filePath, imageUrl);
       setPlantImageURL(imageUrl);
-      updatePlantCardImageURL(imageUrl);
 
       setUpdateNoti({
         open: true,
