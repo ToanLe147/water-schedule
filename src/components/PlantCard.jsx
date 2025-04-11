@@ -67,16 +67,10 @@ export default function PlantCard({
   useEffect(() => {
     const fetchImage = async () => {
       const imageUrl = await utilSupaGetImage(plantImage);
-      localStorage.setItem(plantImage, imageUrl);
       setPlantImageURL(imageUrl);
     };
 
-    if (!localStorage.getItem(plantImage)) {
-      fetchImage();
-    } else {
-      const imageUrl = localStorage.getItem(plantImage);
-      setPlantImageURL(imageUrl);
-    }
+    fetchImage();
 
   }, [plantImage, plantImageURL]);
 
@@ -92,7 +86,8 @@ export default function PlantCard({
         drinkingDay={drinkingDay}
         wateringDate={wateringDate}
         drinkingPortion={drinkingPortion}
-        updatePlantCardImageURL={setPlantImageURL}
+        plantImageURL={plantImageURL}
+        setPlantImageURL={setPlantImageURL}
       />
       <Card
         sx={{
