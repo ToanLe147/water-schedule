@@ -71,7 +71,7 @@ export default function NewPlantPage({ open, setOpen }) {
           />
           <TextField
             margin="dense"
-            label="Scientific Name"
+            label="Other Name"
             name="otherName"
             fullWidth
             value={formData.otherName}
