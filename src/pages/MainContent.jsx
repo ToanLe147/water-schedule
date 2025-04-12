@@ -78,11 +78,10 @@ export default function MainContent() {
         )}
         {plants && !fetchError && (
           <Box sx={{
-            height: '100dvh',
             display: 'flex',
             flexWrap: 'wrap',
             overflow: 'auto',
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
             alignItems: 'center',
             gap: 2,
             padding: 2,

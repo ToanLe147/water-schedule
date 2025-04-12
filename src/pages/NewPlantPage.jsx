@@ -62,7 +62,6 @@ export default function NewPlantPage({ open, setOpen }) {
         <DialogTitle alignSelf='center' >Add New Plant</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
             margin="dense"
             label="Plant Name"
             name="name"
@@ -71,7 +70,6 @@ export default function NewPlantPage({ open, setOpen }) {
             onChange={handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             label="Scientific Name"
             name="scientificName"
@@ -80,7 +78,6 @@ export default function NewPlantPage({ open, setOpen }) {
             onChange={handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             label="Drinking Day (days)"
             name="drinkingDay"
@@ -89,7 +86,6 @@ export default function NewPlantPage({ open, setOpen }) {
             onChange={handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             label="Drinking Portion (ml - mililiters)"
             name="drinkingPortion"
@@ -98,7 +94,6 @@ export default function NewPlantPage({ open, setOpen }) {
             onChange={handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             label="Last Watered"
             name="wateringDate"

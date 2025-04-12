@@ -39,8 +39,8 @@ export default function UserSpeedDial({plantsList}) {
           sx={{
             willChange: 'filter',
             transition: 'filter 300ms',
-            ':hover': {
-              filter: 'drop-shadow(0 0 0.25rem #FFCDD2)',
+            ':hover, :active': {
+              filter: 'brightness(1.4) drop-shadow(0 0 0.75rem #121212)',
             },
           }}
           onClose={handleClose}

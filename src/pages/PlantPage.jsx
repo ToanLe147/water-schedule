@@ -9,8 +9,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Fade from '@mui/material/Fade';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Divider from '@mui/material/Divider';
+import ImageIcon from '@mui/icons-material/Image';
+import HideImageIcon from '@mui/icons-material/HideImage';
+import Grow from '@mui/material/Grow';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
 import CustomNoti from '../components/Notification'
@@ -61,6 +63,7 @@ export default function PlantPage({
     message: 'There is no update',
     severity: 'info'
   });
+  const [openImage, setOpenImage] = useState(true)
 
   const handleUpdateInfo = (event) => {
     setUpdateInfo({
@@ -226,41 +229,41 @@ export default function PlantPage({
           onClose={handleClose}
         >
           <DialogTitle variant='h4' alignSelf='center' >{name}</DialogTitle>
-          <Box
-            component="img"
-            sx={{
-              height: { sm: 300, md: 600 },
-              width: { sm: 300, md: 600 },
-              justifyContent: 'center',
-              alignSelf: 'center',
-              objectFit: 'contain',
-            }}
-            loading='lazy'
-            src={plantImageURL}
-          />
-          <Button
-            component="label"
-            variant="contained"
-            size='small'
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            sx={{
-              width: 'fit-content',
-              alignSelf: 'center',
-              marginTop: 2,
-            }}
+          <Grow in={openImage}
+            {...(openImage ? { timeout: 1000 } : {})}
           >
-            Upload image
-            <VisuallyHiddenInput
-              type="file"
-              onChange={handleImageUpload}
-            />
-          </Button>
-          <Divider sx={{ width: '100%', marginTop: 2 }}>
-            Plant ID: {plantID}
+            <Box
+              component="label"
+              sx={{
+                display: openImage ? "flex" : "none",
+                height: { sm: 300, md: 600 },
+                width: { sm: 300, md: 600 },
+              }}
+            >
+              <Box
+                component="img"
+                sx={{
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  objectFit: 'contain',
+                }}
+                loading='lazy'
+                src={plantImageURL}
+              />
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleImageUpload}
+              />
+            </Box>
+          </Grow>
+          <Divider sx={{ width: '100%', marginTop: 2 }} >
+            <Button variant="text" startIcon={openImage ? <HideImageIcon /> : <ImageIcon />} onClick={() => { setOpenImage((prevMode) => !prevMode) }}>
+              {openImage ? "Hide image" : "Show image"}
+            </Button>
           </Divider>
           <DialogContent
             sx={{
+              width: { sm: 300, md: 600 },
               display: 'flex',
               flexDirection: 'column',
               gap: 2,
@@ -268,7 +271,6 @@ export default function PlantPage({
             }}
           >
             <TextField
-              autoFocus
               disabled={!editMode}
               label="Scientific Name"
               variant="outlined"
@@ -277,7 +279,6 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
             <TextField
-              autoFocus
               disabled={!editMode}
               label="Drinking Day (days)"
               variant="outlined"
@@ -286,7 +287,6 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
             <TextField
-              autoFocus
               disabled={!editMode}
               label="Drinking Portion (ml - mililiters)"
               variant="outlined"
@@ -295,7 +295,6 @@ export default function PlantPage({
               onChange={handleUpdateInfo}
             />
             <TextField
-              autoFocus
               disabled={!editMode}
               label="Last Watered"
               variant="outlined"
