@@ -37,7 +37,7 @@ export default function PlantPage({
   plantID,
   name,
   plantImage,
-  scientificName,
+  otherName,
   drinkingDay,
   wateringDate,
   drinkingPortion,
@@ -53,7 +53,7 @@ export default function PlantPage({
 
   const [editMode, setEditMode] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
-    scientificName: scientificName,
+    otherName: otherName,
     drinkingDay: drinkingDay,
     wateringDate: wateringDate,
     drinkingPortion: drinkingPortion
@@ -74,7 +74,7 @@ export default function PlantPage({
 
   const reloadEditedInfoValue = () => {
     setUpdateInfo({
-      scientificName: scientificName,
+      otherName: otherName,
       drinkingDay: drinkingDay,
       wateringDate: wateringDate,
       drinkingPortion: drinkingPortion
@@ -85,10 +85,10 @@ export default function PlantPage({
 
     var updateStatus = true;
 
-    if (updateInfo.scientificName !== scientificName) {
+    if (updateInfo.otherName !== otherName) {
       const response = await supabase
         .from('plants')
-        .update({ scientificName: updateInfo.scientificName })
+        .update({ otherName: updateInfo.otherName })
         .eq('id', plantID)
 
       if (response.status !== 204) {
@@ -274,8 +274,8 @@ export default function PlantPage({
               disabled={!editMode}
               label="Scientific Name"
               variant="outlined"
-              name='scientificName'
-              value={updateInfo.scientificName}
+              name='otherName'
+              value={updateInfo.otherName}
               onChange={handleUpdateInfo}
             />
             <TextField

@@ -11,7 +11,6 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { supabase } from '../supabaseClient';
 import NewPlantPage from '../pages/NewPlantPage';
 import DeletePlants from '../pages/DeletePlants';
-import { Tooltip } from '@mui/material';
 
 
 export default function UserSpeedDial({plantsList}) {

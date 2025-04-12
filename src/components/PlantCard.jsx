@@ -27,7 +27,7 @@ export default function PlantCard({
   plantID,
   name,
   plantImage,
-  scientificName,
+  otherName,
   drinkingDay,
   wateringDate,
   drinkingPortion }) {
@@ -36,7 +36,7 @@ export default function PlantCard({
   const [plantImageURL, setPlantImageURL] = useState(null);
 
   const findPlantInfo = async () => {
-    const url = `https://www.google.com/search?q=${scientificName}`;
+    const url = `https://www.google.com/search?q=${otherName}`;
     window.open(url, "_blank", "noreferrer");
   }
 
@@ -82,7 +82,7 @@ export default function PlantCard({
         plantID={plantID}
         name={name}
         plantImage={plantImage}
-        scientificName={scientificName}
+        otherName={otherName}
         drinkingDay={drinkingDay}
         wateringDate={wateringDate}
         drinkingPortion={drinkingPortion}
@@ -116,7 +116,7 @@ export default function PlantCard({
             {name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Scientific Name: {scientificName}
+            Scientific Name: {otherName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Drinking Days: {drinkingDay} days

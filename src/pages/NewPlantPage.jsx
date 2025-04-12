@@ -13,7 +13,7 @@ import { supabase } from '../supabaseClient';
 export default function NewPlantPage({ open, setOpen }) {
   const [formData, setFormData] = useState({
     name: '',
-    scientificName: '',
+    otherName: '',
     drinkingDay: '7',
     wateringDate: '2025-04-30',
     drinkingPortion: '100',
@@ -22,7 +22,7 @@ export default function NewPlantPage({ open, setOpen }) {
   const handleClose = () => {
     setFormData({
       name: '',
-      scientificName: '',
+      otherName: '',
       drinkingDay: '',
       wateringDate: '',
       drinkingPortion: '',
@@ -47,7 +47,7 @@ export default function NewPlantPage({ open, setOpen }) {
 
     setFormData({
       name: '',
-      scientificName: '',
+      otherName: '',
       drinkingDay: '7',
       wateringDate: '2025-04-30',
       drinkingPortion: '100',
@@ -72,9 +72,9 @@ export default function NewPlantPage({ open, setOpen }) {
           <TextField
             margin="dense"
             label="Scientific Name"
-            name="scientificName"
+            name="otherName"
             fullWidth
-            value={formData.scientificName}
+            value={formData.otherName}
             onChange={handleChange}
           />
           <TextField

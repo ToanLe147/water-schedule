@@ -92,7 +92,7 @@ export default function MainContent() {
                 plantID={plantInfo.id}
                 name={plantInfo.name}
                 plantImage={plantInfo.image}
-                scientificName={plantInfo.scientificName}
+                otherName={plantInfo.otherName}
                 drinkingDay={plantInfo.drinkingDay}
                 wateringDate={plantInfo.wateringDate}
                 drinkingPortion={plantInfo.drinkingPortion}
