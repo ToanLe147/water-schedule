@@ -272,7 +272,7 @@ export default function PlantPage({
           >
             <TextField
               disabled={!editMode}
-              label="Scientific Name"
+              label="Other Name"
               variant="outlined"
               name='otherName'
               value={updateInfo.otherName}
