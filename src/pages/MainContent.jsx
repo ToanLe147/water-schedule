@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 
-import { Box, Paper, Fab } from '@mui/material'
+import { Box, Paper } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
-import LogoutIcon from '@mui/icons-material/Logout';
 
 import PlantCard from '../components/PlantCard';
 import { supabase } from '../supabaseClient'
-import { AppContainerStyle, theme } from '../styles'
+import { AppContainerStyle, theme, MainPageFetchErrorStyle, MainPagePlantCardsContainerStyle } from '../styles'
 import UserSpeedDial from '../components/SpeedDial';
 
 
@@ -65,30 +64,14 @@ export default function MainContent() {
         {fetchError && (
           <Paper
             elevation={0}
-            sx={{
-              padding: 2,
-              margin: 2,
-              backgroundColor: 'transparent',
-              borderRadius: 2,
-            }}
+            sx={MainPageFetchErrorStyle}
           >
             <h1>Error fetching plants</h1>
             <p>{fetchError}</p>
           </Paper>
         )}
         {plants && !fetchError && (
-          <Box sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            overflowY: 'auto',
-            scrollSnapType: "y",
-            scrollSnapAlign: "center",
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-          }}>
-            <Box sx={{
-              height: { xs: '10%', sm: '10%', md: '0%' },
-            }} />
+          <Box sx={MainPagePlantCardsContainerStyle}>
             {Array.from(plants).map((plantInfo, keyIndex) => (
               <PlantCard
                 key={keyIndex}
@@ -101,9 +84,6 @@ export default function MainContent() {
                 drinkingPortion={plantInfo.drinkingPortion}
               />
             ))}
-            <Box sx={{
-              height: { xs: '10%', sm: '10%', md: '0%' },
-            }} />
           </Box>
         )}
         <UserSpeedDial plantsList={plants} />

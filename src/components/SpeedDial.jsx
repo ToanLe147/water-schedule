@@ -9,6 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { supabase } from '../supabaseClient';
+import { SpeadDialContainer } from '../styles';
 import NewPlantPage from '../pages/NewPlantPage';
 import DeletePlants from '../pages/DeletePlants';
 
@@ -31,15 +32,17 @@ export default function UserSpeedDial({plantsList}) {
     <>
       <NewPlantPage open={openNewPlantPage} setOpen={setOpenNewPlantPage} />
       <DeletePlants open={delPlantPage} setOpen={setDelPlantPage} plantsList={plantsList} />
-      <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1, position: 'absolute', bottom: 20, right: 20, zIndex: 100, }}>
+      <Box sx={SpeadDialContainer}>
         <SpeedDial
           ariaLabel="Options"
           icon={<SpeedDialIcon />}
           sx={{
             willChange: 'filter',
             transition: 'filter 300ms',
-            ':hover, :active': {
-              filter: 'brightness(1.4) drop-shadow(0 0 0.75rem #121212)',
+            ':hover': {
+              md: {
+                filter: 'brightness(1.4) drop-shadow(0 0 0.75rem #121212)',
+              }
             },
           }}
           onClose={handleClose}

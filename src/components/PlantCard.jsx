@@ -15,6 +15,7 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
+import { PlantCardStyle, PlantCardImageStyle, PlantCardContentStyle } from '../styles';
 import PlantPage from '../pages/PlantPage';
 
 const WaterLevel = styled(Rating)({
@@ -90,45 +91,22 @@ export default function PlantCard({
         setPlantImageURL={setPlantImageURL}
       />
       <Card
-        sx={{
-          height: { xs: '80%', sm: '80%', md: 'auto' },
-          width: { xs: '100%', sm: '100%', md: 'auto' },
-          margin: 2,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          willChange: 'filter',
-          transition: 'filter 300ms',
-          ':hover': {
-            filter: 'drop-shadow(0 0 0.85rem #880E4F)',
-          },
-        }}
+        sx={PlantCardStyle}
       >
         <CardActionArea
           onClick={() => setOpenPlantPage(true)}
-          sx={{
-            height: { xs: '50%', sm: '50%', md: 'auto' },
-            // border: "1px solid red"
-          }}
+          sx={PlantCardImageStyle}
         >
           <CardMedia
             component="img"
             src={plantImageURL}
             title={name}
             loading='lazy'
-            sx={{
-              height: { xs: '100%', sm: '100%', md: 'auto' },
-              objectFit: 'contain',
-            }}
+            sx={PlantCardImageStyle}
           />
         </CardActionArea>
         <CardContent
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'begin',
-            // border: "1px solid green"
-          }}
+          sx={PlantCardContentStyle}
         >
           <Typography gutterBottom variant="h5" component="div">
             {name}
@@ -157,11 +135,7 @@ export default function PlantCard({
             value={waterCurrentLevel()}
           />
         </CardContent>
-        <CardActions
-          sx={{
-            // border: "1px solid blue"
-          }}
-        >
+        <CardActions>
           <Button variant="outlined" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
           <Button variant="outlined" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
         </CardActions>

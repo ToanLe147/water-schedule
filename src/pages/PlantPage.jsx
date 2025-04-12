@@ -16,6 +16,7 @@ import Grow from '@mui/material/Grow';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
 import CustomNoti from '../components/Notification'
+import { PlantPageImageStyle, PlantPageImageContainerStyle } from '../styles'
 
 
 export const VisuallyHiddenInput = styled('input')({
@@ -225,8 +226,14 @@ export default function PlantPage({
       <Fade in={open}>
         <Dialog
           open={open}
+          closeAfterTransition={false}
           keepMounted
           onClose={handleClose}
+          maxWidth={{ sm: "90%", md: "50%", lg: "33%", xl: "25%" }}
+          // width={{ sm: "90%", md: "50%", lg: "33%", xl: "25%" }}
+          sx={{
+            border: "2px solid red",
+          }}
         >
           <DialogTitle variant='h4' alignSelf='center' >{name}</DialogTitle>
           <Grow in={openImage}
@@ -234,19 +241,11 @@ export default function PlantPage({
           >
             <Box
               component="label"
-              sx={{
-                display: openImage ? "flex" : "none",
-                height: { sm: 300, md: 600 },
-                width: { sm: 300, md: 600 },
-              }}
+              sx={PlantPageImageContainerStyle(openImage)}
             >
               <Box
                 component="img"
-                sx={{
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  objectFit: 'contain',
-                }}
+                sx={PlantPageImageStyle}
                 loading='lazy'
                 src={plantImageURL}
               />
@@ -256,14 +255,13 @@ export default function PlantPage({
               />
             </Box>
           </Grow>
-          <Divider sx={{ width: '100%', marginTop: 2 }} >
+          <Divider>
             <Button variant="text" startIcon={openImage ? <HideImageIcon /> : <ImageIcon />} onClick={() => { setOpenImage((prevMode) => !prevMode) }}>
               {openImage ? "Hide image" : "Show image"}
             </Button>
           </Divider>
           <DialogContent
             sx={{
-              width: { sm: 300, md: 600 },
               display: 'flex',
               flexDirection: 'column',
               gap: 2,
@@ -271,6 +269,7 @@ export default function PlantPage({
             }}
           >
             <TextField
+              width={{ sm: "sm", md: "50%", lg: "33%", xl: "xl" }}
               disabled={!editMode}
               label="Other Name"
               variant="outlined"
@@ -304,7 +303,9 @@ export default function PlantPage({
             />
           </DialogContent>
           <CustomNoti notiInfo={updateNoti} setNotiInfo={setUpdateNoti} />
-          <DialogActions>
+          <DialogActions sx={{
+            mb: 2
+          }}>
             <Button variant='outlined' onClick={() => { reloadEditedInfoValue(); setEditMode((prevMode) => !prevMode) }}>{editMode ? "Back" : "Edit"}</Button>
             <Button variant='outlined' onClick={() => { submitUpdateInfo(); setEditMode((prevMode) => !prevMode) }} disabled={!editMode}>Submit</Button>
             <Button color='error' variant='outlined' onClick={handleClose}>Close</Button>
