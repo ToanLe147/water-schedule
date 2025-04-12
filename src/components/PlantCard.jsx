@@ -94,12 +94,12 @@ export default function PlantCard({
           width: { xs: '100%', sm: '100%', md: 'auto' },
           willChange: 'filter',
           transition: 'filter 300ms',
-          ':hover, :active': {
+          ':hover': {
             filter: 'drop-shadow(0 0 0.85rem #880E4F)',
           },
         }}
       >
-        <CardActionArea onClick={() => setOpenPlantPage(true)}>
+        <CardActionArea onClick={() => setOpenPlantPage(true)} >
           <CardMedia
             component="img"
             src={plantImageURL}
