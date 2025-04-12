@@ -91,7 +91,12 @@ export default function PlantCard({
       />
       <Card
         sx={{
+          height: { xs: '80%', sm: '80%', md: 'auto' },
           width: { xs: '100%', sm: '100%', md: 'auto' },
+          margin: 2,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           willChange: 'filter',
           transition: 'filter 300ms',
           ':hover': {
@@ -99,19 +104,32 @@ export default function PlantCard({
           },
         }}
       >
-        <CardActionArea onClick={() => setOpenPlantPage(true)} >
+        <CardActionArea
+          onClick={() => setOpenPlantPage(true)}
+          sx={{
+            height: { xs: '50%', sm: '50%', md: 'auto' },
+            // border: "1px solid red"
+          }}
+        >
           <CardMedia
             component="img"
             src={plantImageURL}
             title={name}
             loading='lazy'
             sx={{
-              height: 140,
+              height: { xs: '100%', sm: '100%', md: 'auto' },
               objectFit: 'contain',
             }}
           />
         </CardActionArea>
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'begin', justifyContent: 'space-between' }}>
+        <CardContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'begin',
+            // border: "1px solid green"
+          }}
+        >
           <Typography gutterBottom variant="h5" component="div">
             {name}
           </Typography>
@@ -119,7 +137,7 @@ export default function PlantCard({
             Other Name: {otherName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drinking Days: {drinkingDay} days
+            Duration: {drinkingDay} days
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
@@ -139,7 +157,11 @@ export default function PlantCard({
             value={waterCurrentLevel()}
           />
         </CardContent>
-        <CardActions>
+        <CardActions
+          sx={{
+            // border: "1px solid blue"
+          }}
+        >
           <Button variant="outlined" size="small" startIcon={<LocalDrinkIcon />} onClick={pourWater}>Pour Water</Button>
           <Button variant="outlined" size="small" startIcon={<SearchIcon />} onClick={findPlantInfo}>Learn More</Button>
         </CardActions>

@@ -80,12 +80,15 @@ export default function MainContent() {
           <Box sx={{
             display: 'flex',
             flexWrap: 'wrap',
-            overflow: 'auto',
+            overflowY: 'auto',
+            scrollSnapType: "y",
+            scrollSnapAlign: "center",
             justifyContent: 'space-evenly',
             alignItems: 'center',
-            gap: 2,
-            padding: 2,
           }}>
+            <Box sx={{
+              height: { xs: '10%', sm: '10%', md: '0%' },
+            }} />
             {Array.from(plants).map((plantInfo, keyIndex) => (
               <PlantCard
                 key={keyIndex}
@@ -98,6 +101,9 @@ export default function MainContent() {
                 drinkingPortion={plantInfo.drinkingPortion}
               />
             ))}
+            <Box sx={{
+              height: { xs: '10%', sm: '10%', md: '0%' },
+            }} />
           </Box>
         )}
         <UserSpeedDial plantsList={plants} />
