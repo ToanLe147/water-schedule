@@ -229,11 +229,7 @@ export default function PlantPage({
           closeAfterTransition={false}
           keepMounted
           onClose={handleClose}
-          maxWidth={{ sm: "90%", md: "50%", lg: "33%", xl: "25%" }}
-          // width={{ sm: "90%", md: "50%", lg: "33%", xl: "25%" }}
-          sx={{
-            border: "2px solid red",
-          }}
+          width={{ sm: "90%", md: "80%", lg: "600px", xl: "600px" }}
         >
           <DialogTitle variant='h4' alignSelf='center' >{name}</DialogTitle>
           <Grow in={openImage}
@@ -269,7 +265,6 @@ export default function PlantPage({
             }}
           >
             <TextField
-              width={{ sm: "sm", md: "50%", lg: "33%", xl: "xl" }}
               disabled={!editMode}
               label="Other Name"
               variant="outlined"

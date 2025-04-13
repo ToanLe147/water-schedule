@@ -31,7 +31,7 @@ const DeletePlants = ({ open, setOpen, plantsList }) => {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} >
+      <Dialog open={open} onClose={() => setOpen(false)} closeAfterTransition={false} >
         <DialogTitle>Delete Plants</DialogTitle>
         <DialogContent sx={{
           width: { sm: 200, md: 400 },
