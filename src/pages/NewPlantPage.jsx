@@ -23,9 +23,9 @@ export default function NewPlantPage({ open, setOpen }) {
     setFormData({
       name: '',
       otherName: '',
-      drinkingDay: '',
-      wateringDate: '',
-      drinkingPortion: '',
+      drinkingDay: '7',
+      wateringDate: '2025-04-30',
+      drinkingPortion: '100',
     });
     setOpen(false)
   };
@@ -41,8 +41,8 @@ export default function NewPlantPage({ open, setOpen }) {
       .from('plants')
       .insert(formData)
 
-    if (response.statusText !== "Created" || response.status !== 201) {
-      alert("Cannot create new plant, there is something wrong.")
+    if (response.status !== 201) {
+      alert("Cannot create new plant")
     }
 
     setFormData({

@@ -16,14 +16,13 @@ import { supabase } from '../supabaseClient'
 const DeletePlants = ({ open, setOpen, plantsList }) => {
 
   const handleDelete = async (id) => {
-    console.log(id)
     const response = await supabase
       .from('plants')
       .delete()
       .eq('id', id)
 
     if (response.status !== 204) {
-      alert("Cannot delete plant ID: " + id + ", there is something wrong.")
+      alert("Cannot delete plant ID: " + id)
     }
   };
 

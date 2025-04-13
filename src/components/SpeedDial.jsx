@@ -41,7 +41,7 @@ export default function UserSpeedDial({plantsList}) {
             transition: 'filter 300ms',
             ':hover': {
               md: {
-                filter: 'brightness(1.4) drop-shadow(0 0 0.75rem #121212)',
+                filter: 'drop-shadow(0 0 0.75rem #121212)',
               }
             },
           }}

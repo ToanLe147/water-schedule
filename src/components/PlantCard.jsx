@@ -52,16 +52,13 @@ export default function PlantCard({
   const pourWater = async () => {
     const date = new Date();
     const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-    const { data, error } = await supabase
+    const { _, error } = await supabase
       .from('plants')
       .update({ wateringDate: formattedDate })
       .eq('id', plantID)
       .select();
     if (error) {
-      alert('Error updating watering date: ' + error.message);
-    }
-    if (data) {
-      alert('Watering date updated to: ', formattedDate);
+      alert('Error updating watering date');
     }
   }
 
