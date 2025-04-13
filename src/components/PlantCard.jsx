@@ -15,6 +15,7 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
+import { PlantCardStyle, PlantCardImageStyle, PlantCardContentStyle } from '../styles';
 import PlantPage from '../pages/PlantPage';
 
 const WaterLevel = styled(Rating)({
@@ -51,16 +52,13 @@ export default function PlantCard({
   const pourWater = async () => {
     const date = new Date();
     const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-    const { data, error } = await supabase
+    const { _, error } = await supabase
       .from('plants')
       .update({ wateringDate: formattedDate })
       .eq('id', plantID)
       .select();
     if (error) {
-      alert('Error updating watering date: ' + error.message);
-    }
-    if (data) {
-      alert('Watering date updated to: ', formattedDate);
+      alert('Error updating watering date');
     }
   }
 
@@ -90,28 +88,23 @@ export default function PlantCard({
         setPlantImageURL={setPlantImageURL}
       />
       <Card
-        sx={{
-          width: { xs: '100%', sm: '100%', md: 'auto' },
-          willChange: 'filter',
-          transition: 'filter 300ms',
-          ':hover': {
-            filter: 'drop-shadow(0 0 0.85rem #880E4F)',
-          },
-        }}
+        sx={PlantCardStyle}
       >
-        <CardActionArea onClick={() => setOpenPlantPage(true)} >
+        <CardActionArea
+          onClick={() => setOpenPlantPage(true)}
+          sx={PlantCardImageStyle}
+        >
           <CardMedia
             component="img"
             src={plantImageURL}
             title={name}
             loading='lazy'
-            sx={{
-              height: 140,
-              objectFit: 'contain',
-            }}
+            sx={PlantCardImageStyle}
           />
         </CardActionArea>
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'begin', justifyContent: 'space-between' }}>
+        <CardContent
+          sx={PlantCardContentStyle}
+        >
           <Typography gutterBottom variant="h5" component="div">
             {name}
           </Typography>
@@ -119,7 +112,7 @@ export default function PlantCard({
             Other Name: {otherName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drinking Days: {drinkingDay} days
+            Duration: {drinkingDay} days
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Last Watered: {wateringDate}
