@@ -229,7 +229,8 @@ export default function PlantPage({
           closeAfterTransition={false}
           keepMounted
           onClose={handleClose}
-          width={{ sm: "90%", md: "80%", lg: "600px", xl: "600px" }}
+          fullWidth={true}
+          maxWidth="md"
         >
           <DialogTitle variant='h4' alignSelf='center' >{name}</DialogTitle>
           <Grow in={openImage}

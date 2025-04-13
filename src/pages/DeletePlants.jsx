@@ -30,11 +30,15 @@ const DeletePlants = ({ open, setOpen, plantsList }) => {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} closeAfterTransition={false} >
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        closeAfterTransition={false}
+        fullWidth={true}
+        maxWidth={"xs"}
+      >
         <DialogTitle>Delete Plants</DialogTitle>
-        <DialogContent sx={{
-          width: { sm: 200, md: 400 },
-        }}>
+        <DialogContent>
           <List>
             {plantsList.map((plant) => (
               <ListItem
@@ -49,7 +53,7 @@ const DeletePlants = ({ open, setOpen, plantsList }) => {
                   </IconButton>
                 }
                 sx={{
-                  width: "75%"
+                  width: "75%",
                 }}
               >
                 <ListItemText primary={plant.name} />

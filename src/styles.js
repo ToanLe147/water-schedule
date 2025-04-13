@@ -73,7 +73,6 @@ export const PlantCardImageStyle = {
   height: { xs: '100%', sm: '100%', md: 'auto' },
   borderRadius: "12px",
   objectFit: 'contain',
-  // border: "1px solid red",
 }
 
 export const PlantCardContentStyle = {
@@ -88,8 +87,7 @@ export const PlantPageImageContainerStyle = (openImage) => {
   return (
     {
       display: openImage ? "flex" : "none",
-      height: { xs: 300, sm: 300, md: 'auto' },
-      width: { xs: "90%", sm: "80%", md: '50%' },
+      justifyContent: 'center',
     }
   )
 }

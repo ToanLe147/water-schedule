@@ -58,7 +58,13 @@ export default function NewPlantPage({ open, setOpen }) {
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} closeAfterTransition={false}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition={false}
+        fullWidth={true}
+        maxWidth={"sm"}
+      >
         <DialogTitle alignSelf='center' >Add New Plant</DialogTitle>
         <DialogContent>
           <TextField
