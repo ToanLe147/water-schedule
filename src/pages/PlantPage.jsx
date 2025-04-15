@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import ImageIcon from '@mui/icons-material/Image';
 import HideImageIcon from '@mui/icons-material/HideImage';
 import Grow from '@mui/material/Grow';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
 import CustomNoti from '../components/Notification'
@@ -53,6 +54,7 @@ export default function PlantPage({
   };
 
   const [editMode, setEditMode] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
     otherName: otherName,
     drinkingDay: drinkingDay,
@@ -155,6 +157,8 @@ export default function PlantPage({
   }
 
   const handleImageUpload = async (event) => {
+    setLoadingImage(true);
+
     const uploadImage = event.target.files[0];
     const fileExt = uploadImage.name.split(".").pop();
     const filePath = `${plantID}.${fileExt}`
@@ -220,6 +224,8 @@ export default function PlantPage({
         severity: 'info'
       })
     }, 3000)
+
+    setLoadingImage(false);
   }
 
   return (
@@ -241,6 +247,7 @@ export default function PlantPage({
               component="label"
               sx={PlantPageImageContainerStyle(openImage)}
             >
+              { loadingImage ? <CircularProgress sx={PlantPageImageStyle} /> : null}
               <Box
                 component="img"
                 sx={PlantPageImageStyle}

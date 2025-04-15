@@ -88,6 +88,7 @@ export const PlantPageImageContainerStyle = (openImage) => {
     {
       display: openImage ? "flex" : "none",
       justifyContent: 'center',
+      position: 'relative',
     }
   )
 }
@@ -97,4 +98,5 @@ export const PlantPageImageStyle = {
   alignSelf: 'center',
   objectFit: 'contain',
   borderRadius: '12px',
+  position: 'absolute',
 }
