@@ -159,27 +159,12 @@ export default function PlantPage({
     const fileExt = uploadImage.name.split(".").pop();
     const filePath = `${plantID}.${fileExt}`
 
-    if (plantImage !== 'noimage.png') {
-      const deleteResponse = await supabase
-        .storage
-        .from('plantimage')
-        .remove([plantImage])
-
-      if (deleteResponse.error) {
-        setUpdateNoti({
-          open: true,
-          message: 'Error during updating progress' + deleteResponse.error,
-          severity: 'error'
-        })
-      }
-    }
-
     const uploadResponse = await supabase
       .storage
       .from('plantimage')
       .upload(filePath, uploadImage, {
         cacheControl: '3600',
-        upsert: false
+        upsert: true
       })
 
     if (uploadResponse.error) {
@@ -204,6 +189,22 @@ export default function PlantPage({
         message: 'Update plant image successfully.',
         severity: 'success'
       });
+
+      if (plantImage !== 'noimage.png' && plantImage !== filePath) {
+        const deleteResponse = await supabase
+          .storage
+          .from('plantimage')
+          .remove([plantImage])
+
+        if (deleteResponse.error) {
+          setUpdateNoti({
+            open: true,
+            message: 'Error during updating progress' + deleteResponse.error,
+            severity: 'error'
+          })
+        }
+      }
+
     } else {
       setUpdateNoti({
         open: true,
