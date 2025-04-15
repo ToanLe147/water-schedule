@@ -96,4 +96,5 @@ export const PlantPageImageStyle = {
   justifyContent: 'center',
   alignSelf: 'center',
   objectFit: 'contain',
+  borderRadius: '12px',
 }

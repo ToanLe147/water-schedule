@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import ImageIcon from '@mui/icons-material/Image';
 import HideImageIcon from '@mui/icons-material/HideImage';
 import Grow from '@mui/material/Grow';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { supabase, utilSupaGetImage } from '../supabaseClient';
 import CustomNoti from '../components/Notification'
@@ -53,6 +54,7 @@ export default function PlantPage({
   };
 
   const [editMode, setEditMode] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({
     otherName: otherName,
     drinkingDay: drinkingDay,
@@ -155,31 +157,18 @@ export default function PlantPage({
   }
 
   const handleImageUpload = async (event) => {
+    setLoadingImage(true);
+
     const uploadImage = event.target.files[0];
     const fileExt = uploadImage.name.split(".").pop();
     const filePath = `${plantID}.${fileExt}`
-
-    if (plantImage !== 'noimage.png') {
-      const deleteResponse = await supabase
-        .storage
-        .from('plantimage')
-        .remove([plantImage])
-
-      if (deleteResponse.error) {
-        setUpdateNoti({
-          open: true,
-          message: 'Error during updating progress' + deleteResponse.error,
-          severity: 'error'
-        })
-      }
-    }
 
     const uploadResponse = await supabase
       .storage
       .from('plantimage')
       .upload(filePath, uploadImage, {
         cacheControl: '3600',
-        upsert: false
+        upsert: true
       })
 
     if (uploadResponse.error) {
@@ -204,6 +193,22 @@ export default function PlantPage({
         message: 'Update plant image successfully.',
         severity: 'success'
       });
+
+      if (plantImage !== 'noimage.png' && plantImage !== filePath) {
+        const deleteResponse = await supabase
+          .storage
+          .from('plantimage')
+          .remove([plantImage])
+
+        if (deleteResponse.error) {
+          setUpdateNoti({
+            open: true,
+            message: 'Error during updating progress' + deleteResponse.error,
+            severity: 'error'
+          })
+        }
+      }
+
     } else {
       setUpdateNoti({
         open: true,
@@ -219,6 +224,8 @@ export default function PlantPage({
         severity: 'info'
       })
     }, 3000)
+
+    setLoadingImage(false);
   }
 
   return (
@@ -240,12 +247,14 @@ export default function PlantPage({
               component="label"
               sx={PlantPageImageContainerStyle(openImage)}
             >
-              <Box
-                component="img"
-                sx={PlantPageImageStyle}
-                loading='lazy'
-                src={plantImageURL}
-              />
+              {loadingImage ?
+                <CircularProgress /> :
+                <Box
+                  component="img"
+                  sx={PlantPageImageStyle}
+                  loading='lazy'
+                  src={plantImageURL}
+                />}
               <VisuallyHiddenInput
                 type="file"
                 onChange={handleImageUpload}
