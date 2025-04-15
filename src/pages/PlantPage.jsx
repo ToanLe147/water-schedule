@@ -247,13 +247,14 @@ export default function PlantPage({
               component="label"
               sx={PlantPageImageContainerStyle(openImage)}
             >
-              { loadingImage ? <CircularProgress sx={PlantPageImageStyle} /> : null}
-              <Box
-                component="img"
-                sx={PlantPageImageStyle}
-                loading='lazy'
-                src={plantImageURL}
-              />
+              {loadingImage ?
+                <CircularProgress /> :
+                <Box
+                  component="img"
+                  sx={PlantPageImageStyle}
+                  loading='lazy'
+                  src={plantImageURL}
+                />}
               <VisuallyHiddenInput
                 type="file"
                 onChange={handleImageUpload}
