@@ -33,8 +33,8 @@ This application relies on a Supabase project with the following setup:
     You need to have a table named `plants` in your Supabase database. While the specific schema might depend on the features you implement, at a minimum, it should likely include fields such as:
     * `id` (primary key, auto-incrementing)
     * `name` (text)
-    * `last_watered` (timestamp, or a boolean `is_watered` and a `watered_at` timestamp)
-    * `image_url` (text, storing the path to the image in Supabase Storage)
+    * `last_watered` (datetime)
+    * `image` (text, storing the name of palnt image in Supabase Storage)
     * ... (other relevant plant details)
 
 3.  **Storage Bucket: `plantimage`**
@@ -49,7 +49,7 @@ To run this application locally, ensure you have a Supabase project set up as de
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/ToanLe147/water-schedule.git](https://github.com/ToanLe147/water-schedule.git)
+    git clone https://github.com/ToanLe147/water-schedule.git
     cd water-schedule
     ```
 
@@ -91,3 +91,6 @@ npm run build
 yarn build
 # or
 pnpm build
+```
+
+The built files will be located in the dist directory. Ensure that your production environment has access to your Supabase API URL and key (ideally through environment variables).
